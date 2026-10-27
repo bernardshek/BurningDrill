@@ -1,0 +1,22 @@
+{
+  "name": "poker-trainer",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.34.6",
+  "scripts": {
+    "dev": "pnpm --filter @poker-trainer/web dev",
+    "build": "pnpm --filter @poker-trainer/pack-format build && pnpm --filter @poker-trainer/web build",
+    "test": "pnpm --filter @poker-trainer/pack-format test && pnpm --filter @poker-trainer/web test",
+    "lint": "pnpm --filter @poker-trainer/web lint",
+    "typecheck": "pnpm --filter @poker-trainer/pack-format typecheck && pnpm --filter @poker-trainer/web typecheck",
+    "validate-packs": "pnpm --filter @poker-trainer/pack-format validate"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

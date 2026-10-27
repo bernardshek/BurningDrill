@@ -1,0 +1,57 @@
+{
+  "id": "ms_1_ah7d2c_turn_call",
+  "st": "turn",
+  "hp": "BTN",
+  "vp": "BB",
+  "ip": true,
+  "bd": [
+    "Ah",
+    "7d",
+    "2c",
+    "4d"
+  ],
+  "pot": 11,
+  "eff": 100,
+  "nf": 0.03125,
+  "wu": false,
+  "actions": [
+    {
+      "a": "check",
+      "m": 0.542,
+      "ev": 0.382
+    },
+    {
+      "a": "bet_33",
+      "m": 0.458,
+      "ev": 0.402,
+      "sizeBb": 3.7
+    }
+  ],
+  "best": 1,
+  "dev": 0.02,
+  "kids": [
+    "ms_1_ah7d2c_river_check",
+    "ms_1_ah7d2c_river_bet"
+  ],
+  "combos": [
+    {
+      "c": 1320,
+      "w": 1
+    },
+    {
+      "c": 898,
+      "w": 0.7
+    }
+  ],
+  "drill_id": "btn_bb_srp_full",
+  "line_steps": [
+    "BTN open 2.5bb",
+    "BB call",
+    "Flop",
+    "BTN bet 33%",
+    "BB call",
+    "Turn"
+  ],
+  "line": "BTN open 2.5bb → BB call → Flop → BTN bet 33% → BB call → Turn",
+  "prior_action": "call"
+}

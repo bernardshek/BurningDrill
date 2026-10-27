@@ -1,0 +1,15 @@
+{
+  "id": "btn_bb_turn_ah8d8c3s_asqs",
+  "street": "turn",
+  "board": "Ah8d8c3s",
+  "hero_position": "BB",
+  "villain_position": "BTN",
+  "hero_hand": "AsQs",
+  "potBb": 12,
+  "stackBb": 91,
+  "actions": [
+    { "action": "check", "frequency": 0.48, "evBb": 2.10 },
+    { "action": "bet_33", "sizeBb": 4, "frequency": 0.35, "evBb": 2.45 },
+    { "action": "bet_75", "sizeBb": 9, "frequency": 0.17, "evBb": 1.90 }
+  ]
+}

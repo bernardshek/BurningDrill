@@ -1,0 +1,16 @@
+{
+  "id": "btn_bb_flop_jh7h2h_as9h",
+  "street": "flop",
+  "board": "Jh7h2h",
+  "hero_position": "BB",
+  "villain_position": "BTN",
+  "hero_hand": "As9h",
+  "potBb": 6.5,
+  "stackBb": 97,
+  "actions": [
+    { "action": "check", "frequency": 0.28, "evBb": 1.80 },
+    { "action": "bet_33", "sizeBb": 2.2, "frequency": 0.45, "evBb": 2.25 },
+    { "action": "bet_66", "sizeBb": 4.5, "frequency": 0.20, "evBb": 1.95 },
+    { "action": "raise_pot", "sizeBb": 14, "frequency": 0.07, "evBb": 1.10 }
+  ]
+}

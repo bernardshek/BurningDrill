@@ -1,0 +1,16 @@
+{
+  "id": "btn_bb_flop_qc7d2s_khks",
+  "street": "flop",
+  "board": "Qc7d2s",
+  "hero_position": "BB",
+  "villain_position": "BTN",
+  "hero_hand": "KhKs",
+  "potBb": 6.5,
+  "stackBb": 97,
+  "actions": [
+    { "action": "check", "frequency": 0.12, "evBb": 2.80 },
+    { "action": "bet_33", "sizeBb": 2.2, "frequency": 0.55, "evBb": 3.60 },
+    { "action": "bet_66", "sizeBb": 4.5, "frequency": 0.28, "evBb": 3.40 },
+    { "action": "raise_pot", "sizeBb": 14, "frequency": 0.05, "evBb": 2.20 }
+  ]
+}

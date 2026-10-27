@@ -1,0 +1,24 @@
+{
+  "id": "toy-6max",
+  "name": "Toy 6-max NLHE (BTN vs BB SRP)",
+  "version": "0.2.0",
+  "formatVersion": 1,
+  "table_size": 6,
+  "game": "nlhe_cash",
+  "abstraction": "hu_after_folds",
+  "line": "BTN_vs_BB_SRP",
+  "spots": [
+    "btn_bb_flop_akh7c_asqs",
+    "btn_bb_turn_akh7c2s_asqs",
+    "btn_bb_flop_9h8d7c_thjh",
+    "btn_bb_flop_kskd5c_ac2h",
+    "btn_bb_flop_jh7h2h_as9h",
+    "btn_bb_flop_qc7d2s_khks",
+    "btn_bb_turn_ts9c8h2d_jdqh",
+    "btn_bb_turn_ah8d8c3s_asqs",
+    "btn_bb_river_akh7c2s9d_asqs",
+    "btn_bb_river_jh7h2h5ckd_as9h",
+    "btn_bb_flop_ahkd2s_7c6c",
+    "btn_bb_river_qc7d2s5h3c_jd9c"
+  ]
+}

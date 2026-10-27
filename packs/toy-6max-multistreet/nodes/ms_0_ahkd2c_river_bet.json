@@ -1,0 +1,66 @@
+{
+  "id": "ms_0_ahkd2c_river_bet",
+  "st": "river",
+  "hp": "BB",
+  "vp": "BTN",
+  "ip": false,
+  "bd": [
+    "Ah",
+    "Kd",
+    "2c",
+    "3c",
+    "4c"
+  ],
+  "pot": 11,
+  "eff": 100,
+  "nf": 0.03125,
+  "wu": false,
+  "actions": [
+    {
+      "a": "fold",
+      "m": 0.202,
+      "ev": -0.001
+    },
+    {
+      "a": "call",
+      "m": 0.699,
+      "ev": 0.39
+    },
+    {
+      "a": "raise_2.5x",
+      "m": 0.099,
+      "ev": 0.249,
+      "sizeBb": 8.2
+    }
+  ],
+  "best": 1,
+  "dev": 0.391,
+  "kids": [
+    null,
+    null,
+    null
+  ],
+  "combos": [
+    {
+      "c": 898,
+      "w": 1
+    },
+    {
+      "c": 492,
+      "w": 0.7
+    }
+  ],
+  "drill_id": "btn_bb_srp_full",
+  "line_steps": [
+    "BTN open 2.5bb",
+    "BB call",
+    "Flop",
+    "BTN bet 33%",
+    "BB call",
+    "Turn",
+    "BTN check",
+    "River"
+  ],
+  "line": "BTN open 2.5bb → BB call → Flop → BTN bet 33% → BB call → Turn → BTN check → River",
+  "prior_action": "bet_33"
+}
