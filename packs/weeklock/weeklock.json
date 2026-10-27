@@ -8,6 +8,8 @@
   "no turn/river bluff-shoves",
   "vs 4bet call only QQ+/AK (JJ and below fold)"
  ],
+ "allowed_drill_ids": ["btn_flop_cbet", "bb_vs_cbet"],
+ "blocked_hand_classes": [],
  "scenarios": [
   {
    "id": "rfi_utg",

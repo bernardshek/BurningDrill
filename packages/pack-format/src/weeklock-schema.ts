@@ -29,7 +29,12 @@ export const WeeklockScenarioSchema = z.object({
 });
 export const WeeklockPackSchema = z.object({
   pack: z.literal("weeklock-nl5"), version: z.string().min(1), stakes: z.string().min(1),
-  placeholder: z.boolean().optional(), rules: z.array(z.string().min(1)).optional(), scenarios: z.array(WeeklockScenarioSchema).min(1),
+  placeholder: z.boolean().optional(), rules: z.array(z.string().min(1)).optional(),
+  /** Drill ids (toy-6max-expand) Spot may serve this week. Checked against known ids by validateWeeklockAgainstDrills. */
+  allowed_drill_ids: z.array(z.string()).default([]),
+  /** Rails overrides: hand classes always treated as "red" regardless of RFI charts. */
+  blocked_hand_classes: z.array(HandClassSchema).default([]),
+  scenarios: z.array(WeeklockScenarioSchema).min(1),
 }).superRefine((pack, ctx) => {
   const ids = new Set<string>();
   pack.scenarios.forEach((s, i) => { if (ids.has(s.id)) ctx.addIssue({ code: "custom", message: `duplicate scenario id ${s.id}`, path: ["scenarios", i, "id"] }); ids.add(s.id); });
