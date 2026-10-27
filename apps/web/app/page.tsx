@@ -12,7 +12,8 @@ export default function HomePage() {
         <h2>Start a drill</h2>
         <p className="meta" style={{ marginBottom: "1rem" }}>
           Load the toy pack, pick an action, see Best / Correct / Wrong + EV loss
-          (bb). Scoring: highest frequency wins.
+          (bb). Best is the highest-EV action. Correct if EV loss is at most
+          0.03bb or the mix is at least 15%.
         </p>
         <Link href="/drill">
           <button type="button">Open Drill →</button>

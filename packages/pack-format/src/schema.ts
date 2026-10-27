@@ -20,7 +20,7 @@ export const PositionSchema = z.enum([
 
 /**
  * One legal action in a spot with frequency + EV (bb).
- * Scoring rule: correct action = highest frequency; EV loss = bestEv - chosenEv.
+ * Live drills grade with gradeDrillNode: Best is argmax EV; Correct if EV loss ≤ 0.03 or mix ≥ 0.15.
  */
 export const SpotActionSchema = z.object({
   action: z.string().min(1),
