@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "pack_id": "cash6-srp-btn-bb",
+  "version": "1.0.0",
+  "format": "cash",
+  "table_size": 6,
+  "game_lines": [
+    "flop",
+    "turn",
+    "river"
+  ],
+  "abstraction": "hu_after_folds",
+  "stack_depths_bb": [
+    100
+  ],
+  "bet_sizes": {
+    "labels": [
+      "33",
+      "75",
+      "150",
+      "allin"
+    ]
+  },
+  "icm": null,
+  "blobs": {
+    "strategies": {
+      "sha256": "a1b2c3d4e5f60718293a4b5c6d7e8f90112233445566778899aabbccddeeff00",
+      "bytes": 1048576,
+      "content_type": "application/octet-stream"
+    },
+    "node_index": {
+      "sha256": "00112233445566778899aabbccddeeffa1b2c3d4e5f60718293a4b5c6d7e8f90",
+      "bytes": 8192,
+      "content_type": "application/x-pack-node-index"
+    }
+  },
+  "node_index_format": "jsonl_v1",
+  "spot_key_schema": "street|board|pot_bb|ip_oop|facing",
+  "provenance": {
+    "built_at": "2026-10-22T07:00:00.000Z",
+    "builder": "pack-builder@0.1.0",
+    "solvers": [
+      {
+        "name": "TexasSolver",
+        "version": "0.2.0",
+        "license": "AGPL-3.0",
+        "role": "offline_solve"
+      }
+    ],
+    "ships_solver_code": false,
+    "source_note": "Solved offline; frequencies exported to pack blobs. No solver binary in this artifact."
+  },
+  "license": {
+    "pack_data": "Proprietary",
+    "notice": "Strategy frequencies are trainer data. AGPL solvers were used offline only and are not included."
+  }
+}

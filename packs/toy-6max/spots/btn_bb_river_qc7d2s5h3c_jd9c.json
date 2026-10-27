@@ -1,0 +1,15 @@
+{
+  "id": "btn_bb_river_qc7d2s5h3c_jd9c",
+  "street": "river",
+  "board": "Qc7d2s5h3c",
+  "hero_position": "BB",
+  "villain_position": "BTN",
+  "hero_hand": "Jd9c",
+  "potBb": 24,
+  "stackBb": 80,
+  "actions": [
+    { "action": "check", "frequency": 0.68, "evBb": 0.00 },
+    { "action": "bet_50", "sizeBb": 12, "frequency": 0.22, "evBb": -0.40 },
+    { "action": "bet_100", "sizeBb": 24, "frequency": 0.10, "evBb": -1.10 }
+  ]
+}

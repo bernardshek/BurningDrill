@@ -1,0 +1,15 @@
+{
+  "id": "btn_bb_turn_ts9c8h2d_jdqh",
+  "street": "turn",
+  "board": "Ts9c8h2d",
+  "hero_position": "BB",
+  "villain_position": "BTN",
+  "hero_hand": "JdQh",
+  "potBb": 11,
+  "stackBb": 92.5,
+  "actions": [
+    { "action": "check", "frequency": 0.40, "evBb": 1.20 },
+    { "action": "bet_50", "sizeBb": 5.5, "frequency": 0.42, "evBb": 1.55 },
+    { "action": "bet_100", "sizeBb": 11, "frequency": 0.18, "evBb": 1.05 }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "ms_3_qh7d2c_flop",
+  "st": "flop",
+  "hp": "BTN",
+  "vp": "BB",
+  "ip": true,
+  "bd": [
+    "Qh",
+    "7d",
+    "2c"
+  ],
+  "pot": 6.5,
+  "eff": 100,
+  "nf": 0.03125,
+  "wu": false,
+  "actions": [
+    {
+      "a": "check",
+      "m": 0.55,
+      "ev": 0.415
+    },
+    {
+      "a": "bet_33",
+      "m": 0.348,
+      "ev": 0.456,
+      "sizeBb": 2.2
+    },
+    {
+      "a": "bet_75",
+      "m": 0.102,
+      "ev": 0.202,
+      "sizeBb": 4.9
+    }
+  ],
+  "best": 1,
+  "dev": 0.254,
+  "kids": [
+    "ms_3_qh7d2c_flop_check",
+    "ms_3_qh7d2c_flop_call",
+    null
+  ],
+  "combos": [
+    {
+      "c": 1320,
+      "w": 1
+    },
+    {
+      "c": 492,
+      "w": 0.7
+    }
+  ],
+  "drill_id": "btn_bb_srp_full",
+  "line_steps": [
+    "BTN open 2.5bb",
+    "BB call",
+    "Flop"
+  ],
+  "line": "BTN open 2.5bb → BB call → Flop"
+}

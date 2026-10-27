@@ -1,0 +1,11 @@
+AGPL offline-only note
+======================
+
+TexasSolver and postflop-solver (and similar) are AGPL-licensed solvers.
+This repository’s deployable web app (apps/web / Vercel / web Docker image)
+must NEVER include solver binaries, WASM, or sources.
+
+Packs are static data artifacts (manifest + strategy/index blobs).
+Each CDN PackManifest sets provenance.ships_solver_code = false.
+
+Not legal advice. Flag counsel before commercial use or any live-solve API.

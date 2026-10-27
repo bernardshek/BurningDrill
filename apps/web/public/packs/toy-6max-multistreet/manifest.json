@@ -1,0 +1,53 @@
+{
+  "id": "toy-6max-multistreet",
+  "name": "Toy 6-max · BTN vs BB SRP Full Hand",
+  "version": "0.1.0",
+  "formatVersion": 1,
+  "format": "drill_node_v1",
+  "table_size": 6,
+  "game": "nlhe_cash",
+  "abstraction": "hu_after_folds",
+  "line": "BTN_vs_BB_SRP",
+  "game_lines": [
+    "flop",
+    "turn",
+    "river"
+  ],
+  "provenance": {
+    "kind": "toy_hybrid",
+    "practice": true,
+    "ships_solver_code": false,
+    "note": "Deterministic toy frequencies and EVs for Practice UX; not solver GTO."
+  },
+  "flop_subset": "first four flops from toy-6max-expand/flops-25.json",
+  "nodes": [
+    "ms_0_ahkd2c_river_check",
+    "ms_0_ahkd2c_river_bet",
+    "ms_0_ahkd2c_turn_check",
+    "ms_0_ahkd2c_turn_call",
+    "ms_0_ahkd2c_flop_check",
+    "ms_0_ahkd2c_flop_call",
+    "ms_0_ahkd2c_flop",
+    "ms_1_ah7d2c_river_check",
+    "ms_1_ah7d2c_river_bet",
+    "ms_1_ah7d2c_turn_check",
+    "ms_1_ah7d2c_turn_call",
+    "ms_1_ah7d2c_flop_check",
+    "ms_1_ah7d2c_flop_call",
+    "ms_1_ah7d2c_flop",
+    "ms_2_ksqd2h_river_check",
+    "ms_2_ksqd2h_river_bet",
+    "ms_2_ksqd2h_turn_check",
+    "ms_2_ksqd2h_turn_call",
+    "ms_2_ksqd2h_flop_check",
+    "ms_2_ksqd2h_flop_call",
+    "ms_2_ksqd2h_flop",
+    "ms_3_qh7d2c_river_check",
+    "ms_3_qh7d2c_river_bet",
+    "ms_3_qh7d2c_turn_check",
+    "ms_3_qh7d2c_turn_call",
+    "ms_3_qh7d2c_flop_check",
+    "ms_3_qh7d2c_flop_call",
+    "ms_3_qh7d2c_flop"
+  ]
+}

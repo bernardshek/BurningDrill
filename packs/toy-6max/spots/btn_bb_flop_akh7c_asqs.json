@@ -1,0 +1,16 @@
+{
+  "id": "btn_bb_flop_akh7c_asqs",
+  "street": "flop",
+  "board": "AhKd7c",
+  "hero_position": "BB",
+  "villain_position": "BTN",
+  "hero_hand": "AsQs",
+  "potBb": 6.5,
+  "stackBb": 97,
+  "actions": [
+    { "action": "check", "frequency": 0.22, "evBb": 1.15 },
+    { "action": "bet_33", "sizeBb": 2.2, "frequency": 0.58, "evBb": 2.05 },
+    { "action": "bet_66", "sizeBb": 4.5, "frequency": 0.15, "evBb": 1.40 },
+    { "action": "raise_pot", "sizeBb": 14, "frequency": 0.05, "evBb": 0.35 }
+  ]
+}

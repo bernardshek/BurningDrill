@@ -1,0 +1,15 @@
+{
+  "id": "btn_bb_flop_kskd5c_ac2h",
+  "street": "flop",
+  "board": "KsKd5c",
+  "hero_position": "BB",
+  "villain_position": "BTN",
+  "hero_hand": "Ac2h",
+  "potBb": 6.5,
+  "stackBb": 97,
+  "actions": [
+    { "action": "check", "frequency": 0.72, "evBb": 0.35 },
+    { "action": "bet_33", "sizeBb": 2.2, "frequency": 0.20, "evBb": 0.15 },
+    { "action": "bet_75", "sizeBb": 4.9, "frequency": 0.08, "evBb": -0.25 }
+  ]
+}

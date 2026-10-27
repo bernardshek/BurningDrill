@@ -1,0 +1,32 @@
+{
+  "name": "@poker-trainer/pack-format",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "validate": "node --import tsx src/cli-validate.ts ../../packs/toy-6max/manifest.json && node --import tsx src/cli-validate.ts ../../packs/toy-6max-multistreet/manifest.json && node --import tsx src/cli-weeklock-validate.ts ../../packs/weeklock/weeklock.json"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.30",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
+  },
+  "peerDependencies": {
+    "zod": "^3.23.0"
+  }
+}

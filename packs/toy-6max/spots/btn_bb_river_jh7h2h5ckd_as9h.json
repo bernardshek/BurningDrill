@@ -1,0 +1,16 @@
+{
+  "id": "btn_bb_river_jh7h2h5ckd_as9h",
+  "street": "river",
+  "board": "Jh7h2h5cKd",
+  "hero_position": "BB",
+  "villain_position": "BTN",
+  "hero_hand": "As9h",
+  "potBb": 28,
+  "stackBb": 75,
+  "actions": [
+    { "action": "check", "frequency": 0.08, "evBb": 8.50 },
+    { "action": "bet_66", "sizeBb": 18.5, "frequency": 0.42, "evBb": 12.20 },
+    { "action": "bet_125", "sizeBb": 35, "frequency": 0.35, "evBb": 11.80 },
+    { "action": "raise_allin", "sizeBb": 75, "frequency": 0.15, "evBb": 10.40 }
+  ]
+}

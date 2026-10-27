@@ -1,0 +1,31 @@
+{
+  "id": "flops-25-btn-bb-srp",
+  "note": "Pinned 25-flop study subset (GTOW-style small Trainer ladder). Boards only from this list — never invent at sample time.",
+  "flops": [
+    ["Ah", "Kd", "2c"],
+    ["Ah", "7d", "2c"],
+    ["Ks", "Qd", "2h"],
+    ["Qh", "7d", "2c"],
+    ["Jh", "7d", "2c"],
+    ["Ts", "7d", "2c"],
+    ["9h", "8d", "7c"],
+    ["8h", "7d", "6c"],
+    ["6h", "5d", "4c"],
+    ["Ah", "Kh", "2d"],
+    ["Ah", "7h", "2c"],
+    ["Kh", "9h", "3d"],
+    ["Qs", "Js", "2d"],
+    ["Jc", "Tc", "9h"],
+    ["9c", "8c", "7d"],
+    ["7h", "7d", "2c"],
+    ["Ah", "Ad", "5c"],
+    ["Ts", "Td", "3h"],
+    ["Ah", "Kd", "Kc"],
+    ["2h", "2d", "9c"],
+    ["Ah", "2h", "3h"],
+    ["Kh", "9h", "4h"],
+    ["Qs", "Js", "Ts"],
+    ["8h", "6h", "2h"],
+    ["5s", "4s", "3d"]
+  ]
+}
