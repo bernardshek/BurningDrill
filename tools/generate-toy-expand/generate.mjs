@@ -262,9 +262,11 @@ function normalizeMix(raw) {
  * Mix + EV internally consistent: best = argmax EV; mixes sum ≈1.
  */
 function makeActions(kind, rng, closeBias) {
-  // kind: 'btn_cbet' | 'bb_vs_cbet'
+  // kind: 'btn_cbet' | 'bb_donk' | 'bb_vs_cbet' | 'btn_vs_donk'
+  // bb_donk reuses the check / bet_33 / bet_75 toy mixes (OOP lead).
+  // btn_vs_donk reuses fold / call / raise facing a 33% bet.
   const wantClose = closeBias || rng() < 0.35;
-  if (kind === "btn_cbet") {
+  if (kind === "btn_cbet" || kind === "bb_donk") {
     if (wantClose) {
       // close check vs bet33
       const m = normalizeMix([0.42 + rng() * 0.16, 0.42 + rng() * 0.16]);
@@ -297,10 +299,11 @@ function makeActions(kind, rng, closeBias) {
     ];
     return finalize(actions);
   }
-  // bb_vs_cbet: face bet_33 — fold / call / raise
-  // Keep thin: check isn't legal facing bet; use fold/call/raise_pot-ish
-  // Brief said check/bet33 for flop roots — BB vs cbet is optional 2nd node.
-  // Use fold / call / raise_2.5x as facing actions (still in-tree, not inventing sizes freely)
+  // Facing bet_33 — fold / call / raise (bb_vs_cbet and btn_vs_donk).
+  // Check isn't legal facing a bet. raise_2.5x stays the thin toy raise.
+  if (kind !== "bb_vs_cbet" && kind !== "btn_vs_donk") {
+    throw new Error(`unknown action kind ${kind}`);
+  }
   if (wantClose) {
     const m = normalizeMix([0.35 + rng() * 0.15, 0.35 + rng() * 0.2, 0.1 + rng() * 0.1]);
     const gap = 0.03 + rng() * 0.05;
@@ -348,6 +351,9 @@ function finalize(actions) {
 
 const DRILL_BTN = "btn_flop_cbet";
 const DRILL_BB = "bb_vs_cbet";
+const DRILL_BB_DONK = "bb_flop_donk";
+const DRILL_BTN_VS_DONK = "btn_vs_donk";
+const PACK_VERSION = "0.5.0";
 
 function lineForBtn() {
   const steps = [
@@ -375,6 +381,36 @@ function lineForBb() {
     drill_id: DRILL_BB,
     line_steps: steps,
     line: "BTN open 2.5bb → BB call · Flop · BTN bet 33% · Hero BB to act",
+    prior_action: "bet_33",
+  };
+}
+
+function lineForBbDonk() {
+  const steps = [
+    "BTN open 2.5bb",
+    "BB call",
+    "Flop",
+    "Hero BB to act",
+  ];
+  return {
+    drill_id: DRILL_BB_DONK,
+    line_steps: steps,
+    line: "BTN open 2.5bb → BB call · Flop · Hero BB to act",
+  };
+}
+
+function lineForBtnVsDonk() {
+  const steps = [
+    "BTN open 2.5bb",
+    "BB call",
+    "Flop",
+    "BB bet 33%",
+    "Hero BTN to act",
+  ];
+  return {
+    drill_id: DRILL_BTN_VS_DONK,
+    line_steps: steps,
+    line: "BTN open 2.5bb → BB call · Flop · BB bet 33% · Hero BTN to act",
     prior_action: "bet_33",
   };
 }
@@ -468,6 +504,81 @@ function main() {
     }
   }
 
+  // Second pass: donk shelf. Runs after the c-bet nodes so the seeded mixes
+  // for btn_flop_cbet / bb_vs_cbet stay the same (only nf is rewritten, 1/N).
+  for (let i = 0; i < flops.length; i++) {
+    const bd = flops[i];
+    const boardIds = new Set(bd.map(cardId));
+    const boardRanks = bd.map((c) => RANK_I[c[0]]);
+    const tx = textureTag(bd);
+    const slug = boardIdSlug(bd);
+
+    // Node 3: BB OOP donk — check or lead into BTN (pot still the SRP flop pot).
+    {
+      const combos = pickCombos(BB_RANGE, boardIds, boardRanks, rng);
+      const { actions, best, dev, wu } = makeActions("bb_donk", rng, i % 4 === 0);
+      const id = `n_btn_bb_f_${slug}_bb_donk`;
+      const lineMeta = lineForBbDonk();
+      const node = {
+        id,
+        st: "flop",
+        hp: "BB",
+        vp: "BTN",
+        ip: false,
+        tx,
+        bd,
+        pot: 6.5,
+        eff: 100,
+        nf: 1,
+        wu,
+        best,
+        dev,
+        actions,
+        kids: actions.map(() => null),
+        combos,
+        drill_id: lineMeta.drill_id,
+        line: lineMeta.line,
+        line_steps: lineMeta.line_steps,
+      };
+      nodes.push(node);
+      totalCombos += combos.length;
+      writeFileSync(join(nodesDir, `${id}.json`), JSON.stringify(node, null, 2) + "\n");
+    }
+
+    // Node 4: BTN IP faces the 33% donk — fold / call / raise.
+    {
+      const combos = pickCombos(BTN_RANGE, boardIds, boardRanks, rng);
+      const { actions, best, dev, wu } = makeActions("btn_vs_donk", rng, i % 5 === 0);
+      const id = `n_btn_bb_f_${slug}_btn_vs_donk`;
+      const lineMeta = lineForBtnVsDonk();
+      const node = {
+        id,
+        st: "flop",
+        hp: "BTN",
+        vp: "BB",
+        ip: true,
+        tx,
+        bd,
+        pot: 8.7,
+        eff: 97.8,
+        nf: 1,
+        wu,
+        best,
+        dev,
+        actions,
+        kids: actions.map(() => null),
+        combos,
+        drill_id: lineMeta.drill_id,
+        line: lineMeta.line,
+        line_steps: lineMeta.line_steps,
+        prior_action: lineMeta.prior_action,
+      };
+      nodes.push(node);
+      totalCombos += combos.length;
+      writeFileSync(join(nodesDir, `${id}.json`), JSON.stringify(node, null, 2) + "\n");
+    }
+  }
+
   // Uniform nf
   const nf = 1 / nodes.length;
   for (const n of nodes) {
@@ -478,7 +589,7 @@ function main() {
   const manifest = {
     id: "toy-6max-expand",
     name: "Toy 6-max · 25-flop BTN vs BB SRP",
-    version: "0.4.0",
+    version: PACK_VERSION,
     formatVersion: 1,
     format: "drill_node_v1",
     table_size: 6,
@@ -489,7 +600,7 @@ function main() {
       kind: "toy_hybrid",
       practice: true,
       ships_solver_code: false,
-      note: "Toy-consistent mix/EV for study UX. Not solver GTO. Named drills (btn_flop_cbet / bb_vs_cbet) + line_steps for action chrome. True GTO needs offline solver expand later.",
+      note: "Toy-consistent mix/EV for study UX. Not solver GTO. Named drills (btn_flop_cbet / bb_vs_cbet / bb_flop_donk / btn_vs_donk) + line_steps for action chrome. True GTO needs offline solver expand later.",
     },
     flop_subset: "flops-25.json",
     nodes: nodes.map((n) => n.id),
@@ -512,7 +623,7 @@ function main() {
     bbRangeSize: BB_RANGE.size,
     effectiveDealsApprox: Math.round(totalCombos),
     byDrill,
-    version: "0.4.0",
+    version: PACK_VERSION,
   };
   writeFileSync(join(packDir, "emit-summary.json"), JSON.stringify(summary, null, 2) + "\n");
   console.log(JSON.stringify(summary, null, 2));

@@ -75,7 +75,7 @@ export type DrillNode = {
   /** Child node ids parallel to actions; null = terminal / unknown. */
   kids: (string | null)[];
   combos: DrillCombo[];
-  /** Named mini-drill: btn_flop_cbet | bb_vs_cbet | … */
+  /** Named mini-drill: btn_flop_cbet | bb_vs_cbet | bb_flop_donk | btn_vs_donk | … */
   drill_id?: string;
   /** Full action-line strip for chrome. */
   line?: string;
@@ -85,7 +85,12 @@ export type DrillNode = {
   prior_action?: string;
 };
 
-export type DrillId = "btn_flop_cbet" | "bb_vs_cbet" | "all";
+export type DrillId =
+  | "btn_flop_cbet"
+  | "bb_vs_cbet"
+  | "bb_flop_donk"
+  | "btn_vs_donk"
+  | "all";
 
 export const NAMED_DRILLS: {
   id: DrillId;
@@ -103,11 +108,41 @@ export const NAMED_DRILLS: {
     blurb: "Fold / call / raise facing BTN bet 33%",
   },
   {
+    id: "bb_flop_donk",
+    label: "BB flop donk",
+    blurb: "Check or lead 33% as BB into BTN",
+  },
+  {
+    id: "btn_vs_donk",
+    label: "BTN vs donk",
+    blurb: "Fold / call / raise facing BB bet 33%",
+  },
+  {
     id: "all",
     label: "All (BTN vs BB SRP)",
-    blurb: "Both decision types from this pack",
+    blurb: "All four flop decisions from this pack",
   },
 ];
+
+/**
+ * Spot session tag for LeaksPanel.
+ * Only BTN flop c-bet lands on the cbet row. Donk drills (bb_flop_donk,
+ * btn_vs_donk) and BB vs c-bet stay "other" so the weeklock tag table
+ * (RFI / vs3bet / vs4bet / cbet) is unchanged.
+ */
+export function spotLeakTag(
+  node: Pick<DrillNode, "st" | "hp" | "vp" | "drill_id">,
+): "cbet" | "other" {
+  if (
+    node.st === "flop" &&
+    node.hp === "BTN" &&
+    node.vp === "BB" &&
+    node.drill_id === "btn_flop_cbet"
+  ) {
+    return "cbet";
+  }
+  return "other";
+}
 
 /** Prefer pack line / line_steps; fall back from role + prior_action. */
 export function formatActionLine(node: DrillNode): string {

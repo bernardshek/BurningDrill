@@ -34,13 +34,13 @@ export const CompactDrillNodeSchema = z.object({
   actions: z.array(CompactActionSchema).min(1),
   kids: z.array(z.string().nullable()),
   combos: z.array(CompactComboSchema).min(1),
-  /** Named mini-drill bucket, e.g. btn_flop_cbet | bb_vs_cbet. */
+  /** Named mini-drill bucket, e.g. btn_flop_cbet | bb_vs_cbet | bb_flop_donk | btn_vs_donk. */
   drill_id: z.string().min(1).optional(),
   /** Human action-line strip, e.g. "BTN open 2.5bb → BB call · Flop · Hero to act". */
   line: z.string().min(1).optional(),
   /** Ordered steps for the action-line strip. */
   line_steps: z.array(z.string().min(1)).optional(),
-  /** Immediate prior action at this node (e.g. bet_33 for BB facing c-bet). */
+  /** Immediate prior action at this node (e.g. bet_33 when facing a 33% bet). */
   prior_action: z.string().min(1).optional(),
 });
 

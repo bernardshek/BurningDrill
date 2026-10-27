@@ -19,6 +19,7 @@ import {
   formatTexture,
   gradeDrillNode,
   NAMED_DRILLS,
+  spotLeakTag,
   type DrillGrade,
   type DrillNode,
 } from "@/lib/drill-node";
@@ -245,7 +246,7 @@ export function DrillClient() {
         Math.round((prev.totalEvLossBb + scored.evLossBb) * 1000) / 1000,
       mistakes: mistake ? [...prev.mistakes, mistake] : prev.mistakes,
     }));
-    const record: DecisionRecord = { ts: new Date().toISOString(), mode: "spot", tag: node.st === "flop" && node.hp === "BTN" && node.vp === "BB" && node.drill_id === "btn_flop_cbet" ? "cbet" : "other", scenario_id: node.id, hand: active.heroHand, chosen: action, correct: scored.isCorrect };
+    const record: DecisionRecord = { ts: new Date().toISOString(), mode: "spot", tag: spotLeakTag(node), scenario_id: node.id, hand: active.heroHand, chosen: action, correct: scored.isCorrect };
     appendDecision(record); setLog(readSessionLog());
   }
 

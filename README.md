@@ -2,7 +2,7 @@
 
 Source of truth for the poker-trainer POC: a personal-first NLHE cash **drill trainer** (no live play, no solver in the web app). pnpm monorepo — Next.js App Router UI plus static strategy packs. **Solvers never ship** in the deployable web app or Vercel/Docker web image.
 
-Default pack: [`packs/toy-6max-expand`](packs/toy-6max-expand) **v0.4.0** (`ships_solver_code: false`). The browser loads the copy under [`apps/web/public/packs`](apps/web/public/packs).
+Default pack: [`packs/toy-6max-expand`](packs/toy-6max-expand) **v0.5.0** (`ships_solver_code: false`). The browser loads the copy under [`apps/web/public/packs`](apps/web/public/packs).
 
 ## Quick start
 
@@ -31,7 +31,7 @@ Requires **Node 20+** and **pnpm**.
 ```
 apps/web/                      Next.js UI (Vercel Hobby target)
 packages/pack-format/          Zod PackManifest (CDN) + compact drill spots + scoring
-packs/toy-6max-expand/         Default drill pack v0.4.0 (synced → public/packs)
+packs/toy-6max-expand/         Default drill pack v0.5.0 (synced → public/packs)
 packs/toy-6max/                Slice-1 compact drill JSON
 packs/toy-6max-multistreet/    Flop/turn/river practice nodes
 packs/weeklock/                Week-lock fixture
@@ -44,7 +44,7 @@ tools/generate-toy-expand/     Regenerates toy expand / multistreet JSON
 
 ## How packs are loaded (MVP vs production)
 
-**MVP ($0):** compact drill packs under [`packs/`](packs/) (default [`toy-6max-expand` v0.4.0](packs/toy-6max-expand/manifest.json)) are copied to [`apps/web/public/packs`](apps/web/public/packs) and fetched by the browser. No object store required.
+**MVP ($0):** compact drill packs under [`packs/`](packs/) (default [`toy-6max-expand` v0.5.0](packs/toy-6max-expand/manifest.json)) are copied to [`apps/web/public/packs`](apps/web/public/packs) and fetched by the browser. No object store required.
 
 **Production target:** Cloudflare R2 (not wired in this slice):
 
