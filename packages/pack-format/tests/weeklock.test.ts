@@ -29,3 +29,40 @@ describe("Week lock schema", () => {
     expect(WeeklockPackSchema.safeParse(bad).success).toBe(false);
   });
 });
+
+describe("Week lock allowed_drill_ids / blocked_hand_classes", () => {
+  it("commits exactly the two allowed drills and no blocked hands for 2026-w43", () => {
+    const parsed = WeeklockPackSchema.parse(pack);
+    expect(parsed.version).toBe("2026-w43");
+    expect(parsed.allowed_drill_ids).toEqual(["btn_flop_cbet", "bb_vs_cbet"]);
+    expect(parsed.blocked_hand_classes).toEqual([]);
+  });
+  it("does not allow future pf_* or flop_btn_bb_srp_* ids", () => {
+    const parsed = WeeklockPackSchema.parse(pack);
+    for (const id of parsed.allowed_drill_ids) {
+      expect(id.startsWith("pf_")).toBe(false);
+      expect(id.startsWith("flop_btn_bb_srp_")).toBe(false);
+    }
+  });
+  it("defaults both fields to [] when absent", () => {
+    const legacy = structuredClone(pack) as Record<string, unknown>;
+    delete legacy.allowed_drill_ids;
+    delete legacy.blocked_hand_classes;
+    const parsed = WeeklockPackSchema.parse(legacy);
+    expect(parsed.allowed_drill_ids).toEqual([]);
+    expect(parsed.blocked_hand_classes).toEqual([]);
+  });
+  it("rejects non-array allowed_drill_ids", () => {
+    const bad = structuredClone(pack) as Record<string, unknown>;
+    bad.allowed_drill_ids = "btn_flop_cbet";
+    expect(WeeklockPackSchema.safeParse(bad).success).toBe(false);
+  });
+  it("rejects invalid hand classes in blocked_hand_classes", () => {
+    const bad = structuredClone(pack) as Record<string, unknown>;
+    bad.blocked_hand_classes = ["A1o"];
+    expect(WeeklockPackSchema.safeParse(bad).success).toBe(false);
+    const ok = structuredClone(pack) as Record<string, unknown>;
+    ok.blocked_hand_classes = ["72o"];
+    expect(WeeklockPackSchema.safeParse(ok).success).toBe(true);
+  });
+});
