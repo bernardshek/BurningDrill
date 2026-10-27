@@ -230,6 +230,59 @@ button:disabled {
   border-top: 1px solid var(--border);
 }
 
+.verdict {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+.verdict--quiet {
+  border-left: 3px solid var(--good);
+  padding-left: 0.85rem;
+}
+.verdict--mix {
+  border-left: 3px solid var(--warn);
+  padding-left: 0.85rem;
+}
+.verdict--out {
+  border-left: 3px solid var(--bad);
+  padding-left: 0.85rem;
+}
+.verdict__line,
+.verdict__ev,
+.verdict__why,
+.verdict__freq {
+  margin: 0;
+}
+.verdict__ev {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+}
+.verdict--out .verdict__ev {
+  color: var(--bad);
+  font-weight: 700;
+}
+.verdict__why {
+  margin-top: 0.35rem;
+  max-width: 42rem;
+}
+.verdict__actions {
+  margin-top: 0.75rem;
+}
+.action-btn.picked-mix {
+  border-color: var(--warn);
+  box-shadow: 0 0 0 1px var(--warn);
+}
+.action-btn.picked-out {
+  border-color: var(--bad);
+  box-shadow: 0 0 0 1px var(--bad);
+}
+.badge.mix {
+  background: rgba(241, 196, 15, 0.16);
+  color: var(--text);
+  font-weight: 650;
+}
+
 .site-footer {
   margin-top: 3rem;
   padding-top: 1rem;

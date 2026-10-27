@@ -30,6 +30,8 @@ import {
 } from "@/lib/sample-spot";
 import { handFromComboIndex } from "@/lib/combo1326";
 import { HandWalker } from "@/components/HandWalker";
+import { SpotVerdict } from "@/components/SpotVerdict";
+import { spotPickClass } from "@/lib/spot-verdict";
 import type { WalkerMode } from "@/lib/hand-walker";
 import { WeeklockPackSchema, type WeeklockPack } from "@poker-trainer/pack-format";
 import { appendDecision, readSessionLog, accuracy as logAccuracy, streaks, sessions, type DecisionRecord } from "@/lib/session-log";
@@ -595,8 +597,7 @@ export function DrillClient() {
               const picked = chosen === a.a;
               const isBest = Boolean(result && idx === result.bestIndex);
               let cls = "action-btn";
-              if (picked && result?.isCorrect) cls += " picked-best";
-              if (picked && result && !result.isCorrect) cls += " picked-wrong";
+              if (picked && result) cls += ` ${spotPickClass(result)}`;
               if (isBest && chosen) cls += " is-best";
               return (
                 <button
@@ -607,77 +608,23 @@ export function DrillClient() {
                   onClick={() => onPick(a.a)}
                 >
                   {formatActionLabel(a.a, a.sizeBb)}
-                  {chosen ? (
-                    <>
-                      <div className="meta" style={{ marginTop: 4 }}>
-                        {(a.m * 100).toFixed(0)}% · EV {a.ev.toFixed(2)}bb
-                      </div>
-                      <div className="freq-bar">
-                        <span style={{ width: `${a.m * 100}%` }} />
-                      </div>
-                    </>
-                  ) : null}
                 </button>
               );
             })}
           </div>
 
           {result ? (
-            <div className="result-panel">
-              <span className={`badge ${result.label.toLowerCase()}`}>
-                {result.label}
-              </span>
-              <p style={{ margin: "0.75rem 0 0" }}>
-                You picked{" "}
-                <strong>
-                  {formatActionLabel(
-                    result.chosenAction.a,
-                    result.chosenAction.sizeBb,
-                  )}
-                </strong>
-                . Best (argmax EV):{" "}
-                <strong>
-                  {formatActionLabel(
-                    result.bestAction.a,
-                    result.bestAction.sizeBb,
-                  )}
-                </strong>{" "}
-                ({(result.bestAction.m * 100).toFixed(0)}%).
-              </p>
-              <p className="meta" style={{ margin: "0.35rem 0 0" }}>
-                EV loss vs best:{" "}
-                <strong>{result.evLossBb.toFixed(2)} bb</strong>
-              </p>
-              <div className="row" style={{ marginTop: "1rem" }}>
-                <button type="button" onClick={randomSpot}>
-                  {retryQueue.length > 0 ? "Next retry" : "Random deal"}
-                </button>
-                <button
-                  type="button"
-                  className="secondary"
-                  onClick={endSession}
-                  disabled={session.hands === 0}
-                >
-                  End session
-                </button>
-                <button
-                  type="button"
-                  className="secondary"
-                  onClick={() => setBrowseOpen((v) => !v)}
-                >
-                  Browse pack
-                </button>
-                {browseOpen ? (
-                  <button
-                    type="button"
-                    className="secondary"
-                    onClick={browseNext}
-                  >
-                    Next node (debug)
-                  </button>
-                ) : null}
-              </div>
-            </div>
+            <SpotVerdict
+              node={node}
+              grade={result}
+              nextLabel={retryQueue.length > 0 ? "Next retry" : "Random deal"}
+              onNext={randomSpot}
+              onEnd={endSession}
+              endDisabled={session.hands === 0}
+              browseOpen={browseOpen}
+              onBrowse={() => setBrowseOpen((v) => !v)}
+              onBrowseNext={browseNext}
+            />
           ) : (
             <div className="row" style={{ marginTop: "1rem" }}>
               <p className="meta" style={{ margin: 0 }}>
