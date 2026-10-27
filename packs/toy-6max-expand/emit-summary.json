@@ -1,16 +1,18 @@
 {
-  "nodes": 50,
+  "nodes": 100,
   "flops": 25,
-  "totalCombos": 4571,
-  "avgCombosPerNode": 91.4,
+  "totalCombos": 9126,
+  "avgCombosPerNode": 91.3,
   "minCombos": 61,
   "maxCombos": 120,
   "btnRangeSize": 510,
   "bbRangeSize": 618,
-  "effectiveDealsApprox": 4571,
+  "effectiveDealsApprox": 9126,
   "byDrill": {
     "btn_flop_cbet": 25,
-    "bb_vs_cbet": 25
+    "bb_vs_cbet": 25,
+    "bb_flop_donk": 25,
+    "btn_vs_donk": 25
   },
-  "version": "0.4.0"
+  "version": "0.5.0"
 }

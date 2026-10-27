@@ -1,7 +1,8 @@
 # generate-toy-expand
 
 Emits `packs/toy-6max-expand/` compact DrillNodes from the pinned `flops-25.json`
-list + toy BTN open / BB defend ranges.
+list + toy BTN open / BB defend ranges. v0.5.0 is four named flop drills
+(btn_flop_cbet, bb_vs_cbet, bb_flop_donk, btn_vs_donk) — 25 nodes each.
 
 ```bash
 node tools/generate-toy-expand/generate.mjs

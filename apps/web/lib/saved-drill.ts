@@ -6,7 +6,7 @@ export type DrillSettings = {
   packId: string;
   /** Close-decisions-only sampler mode. */
   closeOnly: boolean;
-  /** Named mini-drill filter (btn_flop_cbet | bb_vs_cbet | all). */
+  /** Named mini-drill filter (btn_flop_cbet | bb_vs_cbet | bb_flop_donk | btn_vs_donk | all). */
   drillId: string;
 };
 
