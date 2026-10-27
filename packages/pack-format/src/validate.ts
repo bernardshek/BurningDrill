@@ -1,5 +1,4 @@
 import { DrillPackSchema, SpotSchema, type DrillPack, type Spot } from "./schema.js";
-import { getBestAction } from "./scoring.js";
 import {
   CompactDrillNodeSchema,
   CompactDrillPackSchema,
@@ -67,11 +66,6 @@ export function validatePack(
       errors.push(
         `spot ${spot.id}: action frequencies sum to ${sum.toFixed(4)} (expected ~1.0)`,
       );
-    }
-    try {
-      getBestAction(spot);
-    } catch (e) {
-      errors.push(e instanceof Error ? e.message : String(e));
     }
     if (spot.street !== "preflop" && !spot.board) {
       errors.push(`spot ${spot.id}: postflop spots require board`);

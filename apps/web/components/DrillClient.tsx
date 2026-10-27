@@ -592,7 +592,7 @@ export function DrillClient() {
           <div className="action-grid">
             {node.actions.map((a, idx) => {
               const picked = chosen === a.a;
-              const isBest = Boolean(chosen && idx === node.best);
+              const isBest = Boolean(result && idx === result.bestIndex);
               let cls = "action-btn";
               if (picked && result?.isCorrect) cls += " picked-best";
               if (picked && result && !result.isCorrect) cls += " picked-wrong";

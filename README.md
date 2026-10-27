@@ -22,7 +22,7 @@ Other commands:
 | `pnpm build` | Build pack-format, sync packs into `public/`, build Next app |
 | `pnpm test` | Vitest: PackManifest + drill pack schema + scoring |
 | `pnpm typecheck` | `tsc --noEmit` in packages |
-| `pnpm validate-packs` | CLI validate toy drill pack |
+| `pnpm validate-packs` | CLI validate toy packs, including `toy-6max-expand`, and weeklock |
 
 Requires **Node 20+** and **pnpm**.
 
@@ -59,7 +59,13 @@ Schema: `packages/pack-format/src/manifest.ts` (`schema_version`, `pack_id`, `sh
 
 ## Scoring rule
 
-For a spot’s action list, **correct = highest `frequency`**. Ties break by higher `evBb`, then list order. UI shows **Best / Correct / Wrong** and **EV loss (bb)** = `max(0, best.evBb − chosen.evBb)`.
+Live drills grade with `gradeDrillNode` only.
+
+- **Best** — the highest-EV action. A line within 0.01bb of that EV is still Best.
+- **Correct** — Best, or EV loss ≤ 0.03bb, or the action’s mix is at least 0.15.
+- **Wrong** — anything else.
+
+EV loss (bb) = `max(0, bestEv − chosenEv)`.
 
 ## User stub
 

@@ -2,9 +2,8 @@ import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
-import { DrillPackSchema, SpotSchema } from "../src/schema.js";
+import { DrillPackSchema } from "../src/schema.js";
 import { validatePack } from "../src/validate.js";
-import { getBestAction, scoreAction } from "../src/scoring.js";
 import {
   EXAMPLE_MANIFEST,
   PackManifest,
@@ -133,33 +132,5 @@ describe("toy drill pack", () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.spots.length).toBeGreaterThanOrEqual(1);
-  });
-});
-
-describe("scoring", () => {
-  it("picks highest frequency as correct; reports EV loss", () => {
-    const spot = SpotSchema.parse({
-      id: "t1",
-      street: "flop",
-      board: "AhKd7c",
-      hero_position: "BB",
-      villain_position: "BTN",
-      hero_hand: "AsQs",
-      actions: [
-        { action: "check", frequency: 0.25, evBb: 1.0 },
-        { action: "bet", sizeBb: 3.5, frequency: 0.6, evBb: 2.2 },
-        { action: "raise", sizeBb: 12, frequency: 0.15, evBb: 0.4 },
-      ],
-    });
-    const best = getBestAction(spot);
-    expect(best.action).toBe("bet");
-    const wrong = scoreAction(spot, "check");
-    expect(wrong.isCorrect).toBe(false);
-    expect(wrong.label).toBe("Wrong");
-    expect(wrong.evLossBb).toBeCloseTo(1.2, 5);
-    const right = scoreAction(spot, "bet");
-    expect(right.isCorrect).toBe(true);
-    expect(right.label).toBe("Best");
-    expect(right.evLossBb).toBe(0);
   });
 });

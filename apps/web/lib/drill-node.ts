@@ -143,10 +143,31 @@ export type DrillGrade = {
   isCorrect: boolean;
 };
 
-/** Correct = EV loss ≤ 0.03 bb OR chosen mix ≥ 0.15; Best = argmax EV (loss ≈ 0). */
+/** Correct = EV loss ≤ 0.03 bb OR chosen mix ≥ 0.15. */
 export const CORRECT_EV_LOSS_BB = 0.03;
 export const CORRECT_MIX_FLOOR = 0.15;
+/** Best ≈ argmax EV: a line within this gap of the max EV is still Best. */
+export const BEST_EV_TIE_BB = 0.01;
+/** Absorbs binary float dust so an exact 0.03 / 0.15 / 0.01 boundary stays inclusive. */
+const BB_COMPARE_SLACK = 1e-9;
 
+function lteBb(value: number, limit: number): boolean {
+  return value <= limit + BB_COMPARE_SLACK;
+}
+
+function argmaxEvIndex(actions: DrillAction[]): number {
+  let best = 0;
+  for (let i = 1; i < actions.length; i++) {
+    if (actions[i]!.ev > actions[best]!.ev) best = i;
+  }
+  return best;
+}
+
+/**
+ * Only live drill grade.
+ * Best = argmax EV (or within BEST_EV_TIE_BB).
+ * Correct = Best, or EV loss ≤ 0.03bb, or mix ≥ 0.15.
+ */
 export function gradeDrillNode(
   node: DrillNode,
   chosenActionId: string,
@@ -155,16 +176,15 @@ export function gradeDrillNode(
   if (chosenIndex < 0) {
     throw new Error(`Action "${chosenActionId}" not in node ${node.id}`);
   }
-  const bestIndex = node.best;
+  const bestIndex = argmaxEvIndex(node.actions);
   const chosenAction = node.actions[chosenIndex]!;
   const bestAction = node.actions[bestIndex]!;
   const evLossBb = Math.max(0, bestAction.ev - chosenAction.ev);
-  const isBest =
-    chosenIndex === bestIndex || evLossBb <= 0.01;
+  const isBest = lteBb(evLossBb, BEST_EV_TIE_BB);
   const isCorrect =
     isBest ||
-    evLossBb <= CORRECT_EV_LOSS_BB ||
-    chosenAction.m >= CORRECT_MIX_FLOOR;
+    lteBb(evLossBb, CORRECT_EV_LOSS_BB) ||
+    chosenAction.m + BB_COMPARE_SLACK >= CORRECT_MIX_FLOOR;
   let label: DrillGradeLabel;
   if (isBest) label = "Best";
   else if (isCorrect) label = "Correct";
