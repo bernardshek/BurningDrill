@@ -12,6 +12,7 @@
 import { isComboBlockedByBoard, handFromComboIndex } from "./combo1326";
 import type { DrillNode } from "./drill-node";
 import { DUMP_GAP_BB, DUMP_MIX } from "./adapt-toy-spot";
+import { handClassFromCombo } from "./weeklock";
 
 export const CLOSE_DEV_MAX = 0.08;
 export const CLOSE_MIX_DEV_MAX = 0.12;
@@ -20,6 +21,8 @@ export const CLOSE_MIX_HI = 0.75;
 export const P_CLOSE_DEFAULT = 0.25;
 export const P_WARMUP = 0.07;
 export const MAX_CLOSE_RESAMPLES = 20;
+/** Extra deals after a weeklock red hand, then fail closed. */
+export const MAX_RED_RESAMPLES = 20;
 export const W_MIN_RELATIVE = 0.0005;
 
 export type RejectReason =
@@ -32,7 +35,8 @@ export type RejectReason =
   | "no_decision"
   | "dump"
   | "resample_exhausted"
-  | "empty_pool";
+  | "empty_pool"
+  | "red_hand";
 
 export type SampleTelemetry = {
   rejectReasons: Partial<Record<RejectReason, number>>;
@@ -62,6 +66,13 @@ export type SampleOptions = {
   random?: () => number;
   /** Filter to nodes with this drill_id (ignore when empty / "all"). */
   drillId?: string;
+  /**
+   * 169-classes to reject after a combo is sampled (weeklock red hands).
+   * Omitted or empty leaves sampling unchanged.
+   */
+  redHandClasses?: readonly string[];
+  /** Cap on rejected red deals before returning null. Default MAX_RED_RESAMPLES. */
+  maxRedResamples?: number;
 };
 
 /** Narrow a node list to a named mini-drill. */
@@ -198,8 +209,9 @@ function dealFrom(
 /**
  * Sample a node + hero combo from a DrillPack node list.
  * Returns null only when no decision node can deal a non-blocked combo.
+ * Red-hand rejection is applied by `sampleSpot`, not here.
  */
-export function sampleSpot(
+function sampleSpotOnce(
   nodes: DrillNode[],
   options: SampleOptions = {},
 ): SampleResult | null {
@@ -252,4 +264,35 @@ export function sampleSpot(
     telemetry.usedWarmup = true;
   }
   return dealFrom(pool, random, telemetry) ?? dealFrom(basePool, random, telemetry);
+}
+
+/**
+ * Sample a node + hero combo from a DrillPack node list.
+ * Returns null when no decision node can deal a non-blocked combo, or when
+ * every capped attempt lands on a weeklock red hand (fail closed — no red deal).
+ * `redHandClasses` omitted or empty keeps the historical sampler.
+ */
+export function sampleSpot(
+  nodes: DrillNode[],
+  options: SampleOptions = {},
+): SampleResult | null {
+  const redList = options.redHandClasses;
+  if (redList == null || redList.length === 0) {
+    return sampleSpotOnce(nodes, options);
+  }
+  const red = new Set(redList);
+  const maxResamples = options.maxRedResamples ?? MAX_RED_RESAMPLES;
+  const random = options.random ?? Math.random;
+  const attempts = Math.max(0, maxResamples) + 1;
+  let redRejects = 0;
+  for (let i = 0; i < attempts; i++) {
+    const hit = sampleSpotOnce(nodes, { ...options, random });
+    if (!hit) return null;
+    if (!red.has(handClassFromCombo(hit.heroHand))) {
+      if (redRejects > 0) hit.telemetry.rejectReasons.red_hand = redRejects;
+      return hit;
+    }
+    redRejects += 1;
+  }
+  return null;
 }

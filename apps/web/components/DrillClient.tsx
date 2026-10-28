@@ -33,9 +33,14 @@ import { HandWalker } from "@/components/HandWalker";
 import { SpotVerdict } from "@/components/SpotVerdict";
 import { spotPickClass } from "@/lib/spot-verdict";
 import type { WalkerMode } from "@/lib/hand-walker";
-import { WeeklockPackSchema, type WeeklockPack } from "@poker-trainer/pack-format";
+import { redHandsFromWeeklock, WeeklockPackSchema, type WeeklockPack } from "@poker-trainer/pack-format";
 import { appendDecision, readSessionLog, accuracy as logAccuracy, streaks, sessions, type DecisionRecord } from "@/lib/session-log";
-import { correctActions, dealWeeklock, handClassFromCombo } from "@/lib/weeklock";
+import { correctActions, dealWeeklock } from "@/lib/weeklock";
+import {
+  EMPTY_WEEKLOCK_DRILL_POOL_MESSAGE,
+  RED_HANDS_EXHAUSTED_MESSAGE,
+  spotDrillShelf,
+} from "@/lib/weeklock-spot";
 
 type WeeklockDeal = ReturnType<typeof dealWeeklock>;
 
@@ -111,10 +116,32 @@ export function DrillClient() {
     getOrCreateLocalUser();
   }, []);
 
-  const filteredNodes = useMemo(
-    () => filterNodesByDrillId(nodes, settings.drillId),
-    [nodes, settings.drillId],
+  const shelf = useMemo(
+    () => spotDrillShelf(weeklockOn, weeklock, settings.drillId),
+    [weeklockOn, weeklock, settings.drillId],
   );
+  const redHandClasses = useMemo(
+    () => (weeklockOn && weeklock ? redHandsFromWeeklock(weeklock) : []),
+    [weeklockOn, weeklock],
+  );
+  if (shelf.status === "ready" && shelf.drillId !== settings.drillId) {
+    setSettings((s) =>
+      s.drillId === shelf.drillId ? s : { ...s, drillId: shelf.drillId },
+    );
+  }
+  const filteredNodes = useMemo(() => {
+    if (shelf.status === "ready") {
+      return nodes.filter((n) => n.drill_id === shelf.drillId);
+    }
+    if (shelf.status === "open") {
+      return filterNodesByDrillId(nodes, settings.drillId);
+    }
+    return [];
+  }, [nodes, settings.drillId, shelf]);
+  const dealRed =
+    shelf.status === "ready" && redHandClasses.length > 0
+      ? redHandClasses
+      : undefined;
 
   const node = active?.node ?? null;
   const bestAction = node ? node.actions[node.best] : null;
@@ -141,6 +168,7 @@ export function DrillClient() {
       closeOnly: boolean,
       drillId: string,
       preferSequentialIndex?: number,
+      redHandClasses?: readonly string[],
     ) => {
       if (list.length === 0) {
         setActive(null);
@@ -161,9 +189,19 @@ export function DrillClient() {
         setLastTelemetry(null);
         return;
       }
-      const sampled = sampleSpot(list, { closeOnly, drillId });
+      const sampled = sampleSpot(list, {
+        closeOnly,
+        drillId,
+        ...(redHandClasses && redHandClasses.length > 0
+          ? { redHandClasses }
+          : {}),
+      });
       if (!sampled) {
-        setError("No eligible spots in pack");
+        setError(
+          redHandClasses && redHandClasses.length > 0
+            ? RED_HANDS_EXHAUSTED_MESSAGE
+            : "No eligible spots in pack",
+        );
         setActive(null);
         return;
       }
@@ -199,13 +237,40 @@ export function DrillClient() {
         }
         setPack(loaded);
         setNodes(adapted);
-        const pool = filterNodesByDrillId(adapted, s.drillId);
-        dealFromNodes(pool, s.closeOnly, s.drillId);
+        const resolved = spotDrillShelf(weeklockOn, weeklock, s.drillId);
+        if (resolved.status === "blocked" || resolved.status === "loading") {
+          setActive(null);
+          if (resolved.status === "blocked") setError(resolved.error);
+          return;
+        }
+        const drillId = resolved.status === "ready" ? resolved.drillId : s.drillId;
+        const pool =
+          resolved.status === "ready"
+            ? adapted.filter((n) => n.drill_id === drillId)
+            : filterNodesByDrillId(adapted, drillId);
+        if (pool.length === 0) {
+          setActive(null);
+          setError(
+            resolved.status === "ready"
+              ? EMPTY_WEEKLOCK_DRILL_POOL_MESSAGE
+              : "No eligible spots in pack",
+          );
+        } else {
+          dealFromNodes(
+            pool,
+            s.closeOnly,
+            drillId,
+            undefined,
+            resolved.status === "ready" && redHandClasses.length > 0
+              ? redHandClasses
+              : undefined,
+          );
+        }
         updateLocalUser({
           pack_prefs: {
             last_pack: s.packId,
             last_line: s.line,
-            last_drill: s.drillId,
+            last_drill: drillId,
           },
         });
       } catch (e) {
@@ -217,8 +282,41 @@ export function DrillClient() {
         setLoading(false);
       }
     },
-    [dealFromNodes],
+    [dealFromNodes, weeklockOn, weeklock, redHandClasses],
   );
+
+  useEffect(() => {
+    if (!weeklockOn || !weeklock) return;
+    const resolved = spotDrillShelf(true, weeklock, settings.drillId);
+    if (resolved.status !== "ready") {
+      if (resolved.status === "blocked") {
+        setActive(null);
+        setChosen(null);
+        setResult(null);
+      }
+      return;
+    }
+    if (nodes.length === 0) return;
+    if (active?.node.drill_id === resolved.drillId) return;
+    setChosen(null);
+    setResult(null);
+    const pool = nodes.filter((n) => n.drill_id === resolved.drillId);
+    if (pool.length === 0) {
+      setActive(null);
+      setError(EMPTY_WEEKLOCK_DRILL_POOL_MESSAGE);
+      return;
+    }
+    dealFromNodes(
+      pool,
+      settings.closeOnly,
+      resolved.drillId,
+      undefined,
+      redHandClasses.length > 0 ? redHandClasses : undefined,
+    );
+    // Deal only when week lock turns on or its pack arrives. Dropdown changes
+    // still wait for Load / Random, matching the weeklock-off shelf.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [weeklockOn, weeklock]);
 
   function onPick(action: string) {
     if (!node || !active || chosen) return;
@@ -253,7 +351,19 @@ export function DrillClient() {
   }
 
   function toggleWeeklock(enabled: boolean) {
-    setWeeklockOn(enabled); localStorage.setItem("pt_weeklock_on_v1", String(enabled)); setWeekDeal(null); setWeekChoice(null); setWeekCorrect(null);
+    setWeeklockOn(enabled);
+    localStorage.setItem("pt_weeklock_on_v1", String(enabled));
+    setWeekDeal(null);
+    setWeekChoice(null);
+    setWeekCorrect(null);
+    if (!enabled) {
+      setError((prev) =>
+        prev === RED_HANDS_EXHAUSTED_MESSAGE ||
+        prev === EMPTY_WEEKLOCK_DRILL_POOL_MESSAGE
+          ? null
+          : prev,
+      );
+    }
   }
   function dealWeek() { if (!weeklock) return; setWeekDeal(dealWeeklock(weeklock)); setWeekChoice(null); setWeekCorrect(null); }
   function pickWeekAction(action: string) {
@@ -272,7 +382,13 @@ export function DrillClient() {
     setResult(null);
     const next =
       active != null ? (active.sourceIndex + 1) % filteredNodes.length : 0;
-    dealFromNodes(filteredNodes, settings.closeOnly, settings.drillId, next);
+    dealFromNodes(
+      filteredNodes,
+      settings.closeOnly,
+      settings.drillId,
+      next,
+      dealRed,
+    );
   }
 
   function randomSpot() {
@@ -294,7 +410,13 @@ export function DrillClient() {
         return;
       }
     }
-    dealFromNodes(filteredNodes, settings.closeOnly, settings.drillId);
+    dealFromNodes(
+      filteredNodes,
+      settings.closeOnly,
+      shelf.status === "ready" ? shelf.drillId : settings.drillId,
+      undefined,
+      dealRed,
+    );
   }
 
   function onSave() {
@@ -333,7 +455,13 @@ export function DrillClient() {
       setRetryQueue(session.mistakes.slice(1));
       setLastTelemetry(null);
     } else {
-      dealFromNodes(filteredNodes, settings.closeOnly, settings.drillId);
+      dealFromNodes(
+        filteredNodes,
+        settings.closeOnly,
+        shelf.status === "ready" ? shelf.drillId : settings.drillId,
+        undefined,
+        dealRed,
+      );
     }
   }
 
@@ -343,7 +471,13 @@ export function DrillClient() {
     setScorecardOpen(false);
     setChosen(null);
     setResult(null);
-    dealFromNodes(filteredNodes, settings.closeOnly, settings.drillId);
+    dealFromNodes(
+      filteredNodes,
+      settings.closeOnly,
+      shelf.status === "ready" ? shelf.drillId : settings.drillId,
+      undefined,
+      dealRed,
+    );
   }
 
   const flopLabel =
@@ -351,7 +485,9 @@ export function DrillClient() {
       ? `${pack.flopCount}-flop study subset · not every Hold’em flop`
       : "Study subset · deals reshuffle from this pack";
 
-  const drillMeta = NAMED_DRILLS.find((d) => d.id === settings.drillId);
+  const drillMeta = NAMED_DRILLS.find(
+    (d) => d.id === (shelf.status === "blocked" ? "" : shelf.drillId),
+  );
   const shortNodeId = active?.node.id
     ? active.node.id.replace(/^n_btn_bb_f_/, "").slice(0, 18)
     : "";
@@ -367,23 +503,24 @@ export function DrillClient() {
         <button type="button" className="secondary" onClick={() => setMode("full_hand")}>Full Hand</button>
       </div>
       <div className="card">
-        <label className="field field-toggle">Week lock <span className="toggle-row"><input type="checkbox" checked={weeklockOn} onChange={e => toggleWeeklock(e.target.checked)} /><span className="meta">{weeklockOn ? "NL5 weekly leak drill" : "Use current EV drill"}</span></span></label>
+        <label className="field field-toggle">Week lock <span className="toggle-row"><input type="checkbox" checked={weeklockOn} onChange={e => toggleWeeklock(e.target.checked)} /><span className="meta">{weeklockOn ? "Spot limited to this week's drills" : "Full drill shelf"}</span></span></label>
       </div>
       <p className="lead">
         Cash · 6-max · named decision drills. Pick a question, then deal inside
         that spot. Best = argmax EV. Close-only is a mode, not the product.
       </p>
 
-      {!weeklockOn ? <div className="card">
+      <div className="card">
         <h2>Settings</h2>
         <div className="row">
           <label className="field">
             Drill
             <select
-              value={settings.drillId}
+              value={shelf.status === "blocked" ? "" : shelf.drillId}
               onChange={(e) => onDrillChange(e.target.value)}
+              disabled={shelf.status === "loading" || shelf.status === "blocked"}
             >
-              {NAMED_DRILLS.map((d) => (
+              {shelf.drills.map((d) => (
                 <option key={d.id} value={d.id}>
                   {d.label}
                 </option>
@@ -470,8 +607,30 @@ export function DrillClient() {
               : ""}
           </p>
         ) : null}
+        {shelf.status === "ready" ? (
+          <p className="meta" style={{ marginTop: "0.75rem", marginBottom: 0 }}>
+            Week lock limits Spot to this week&apos;s drills.
+          </p>
+        ) : null}
+        {shelf.status === "loading" ? (
+          <p className="meta" style={{ marginTop: "0.75rem" }}>
+            Loading week lock…
+          </p>
+        ) : null}
+        {shelf.status === "blocked" ? (
+          <p style={{ color: "var(--bad)", marginTop: "0.75rem" }}>{shelf.error}</p>
+        ) : null}
+        {shelf.status === "ready" && nodes.length > 0 && filteredNodes.length === 0 ? (
+          <p style={{ color: "var(--bad)", marginTop: "0.75rem" }}>
+            {EMPTY_WEEKLOCK_DRILL_POOL_MESSAGE}
+          </p>
+        ) : null}
         <div className="row" style={{ marginTop: "1rem" }}>
-          <button type="button" onClick={() => load(settings)} disabled={loading}>
+          <button
+            type="button"
+            onClick={() => load(settings)}
+            disabled={loading || (weeklockOn && shelf.status !== "ready")}
+          >
             {loading ? "Loading…" : "Load / start"}
           </button>
           <button type="button" className="secondary" onClick={onSave}>
@@ -482,14 +641,7 @@ export function DrillClient() {
         {error ? (
           <p style={{ color: "var(--bad)", marginTop: "0.75rem" }}>{error}</p>
         ) : null}
-      </div> : null}
-
-      {weeklockOn && weeklock ? <div className="card">
-        <h2>Week lock · {weeklock.stakes} · {weeklock.version} {weeklock.placeholder === true ? <span className="badge practice">Placeholder rules</span> : null}</h2>
-        {weeklock.rules?.length ? <div className="meta" style={{ marginBottom: "0.75rem" }}><strong>Week lock rules</strong><ul style={{ margin: "0.25rem 0 0", paddingLeft: "1.25rem" }}>{weeklock.rules.map((rule, index) => <li key={index}>{rule}</li>)}</ul></div> : null}
-        <div className="metrics-bar"><div className="metric"><span className="metric__label">Accuracy</span><span className="metric__value">{accuracyPct == null ? "—" : `${accuracyPct}%`}</span></div><div className="metric"><span className="metric__label">Hands</span><span className="metric__value">{session.hands}</span></div></div>
-        {weekDeal ? <><p className="action-line">{weekDeal.scenario.line}</p><div className="poker-table"><div className="poker-table__hero"><CardRow cards={parseCards(weekDeal.hand)} size="medium" label={`Hero ${weekDeal.scenario.hero_pos}`} overlap /></div><div className="poker-table__meta"><span>{weekDeal.scenario.tag}</span><span>Hero {weekDeal.scenario.hero_pos}</span><span>{weekDeal.scenario.villain_pos ? `Villain ${weekDeal.scenario.villain_pos}` : "No villain yet"}</span><span>{weekDeal.handClass}</span></div></div><div className="action-grid">{weekDeal.scenario.actions.map(action => <button key={action} type="button" className="action-btn" disabled={Boolean(weekChoice)} onClick={() => pickWeekAction(action)}>{formatActionLabel(action)}</button>)}</div>{weekChoice ? <div className="result-panel"><span className={`badge ${weekCorrect ? "correct" : "wrong"}`}>{weekCorrect ? "Correct" : "Wrong"}</span><p>Correct action(s): <strong>{correctActions(weekDeal.scenario, weekDeal.handClass).map(formatActionLabel).join(" / ")}</strong></p><p className="meta">{weekDeal.scenario.note}</p><button type="button" onClick={dealWeek}>Next hand</button></div> : null}</> : <button type="button" onClick={dealWeek} disabled={!weeklock}>Deal hand</button>}
-      </div> : null}
+      </div>
 
       {pack && node && active ? (
         <div className="card">
@@ -648,6 +800,14 @@ export function DrillClient() {
           )}
         </div>
       ) : null}
+
+      {weeklockOn && weeklock ? <div className="card">
+        <h2>Week lock · {weeklock.stakes} · {weeklock.version} {weeklock.placeholder === true ? <span className="badge practice">Placeholder rules</span> : null}</h2>
+        <p className="meta">Chart drill. Spot above stays the training surface.</p>
+        {weeklock.rules?.length ? <div className="meta" style={{ marginBottom: "0.75rem" }}><strong>Week lock rules</strong><ul style={{ margin: "0.25rem 0 0", paddingLeft: "1.25rem" }}>{weeklock.rules.map((rule, index) => <li key={index}>{rule}</li>)}</ul></div> : null}
+        <div className="metrics-bar"><div className="metric"><span className="metric__label">Accuracy</span><span className="metric__value">{accuracyPct == null ? "—" : `${accuracyPct}%`}</span></div><div className="metric"><span className="metric__label">Hands</span><span className="metric__value">{session.hands}</span></div></div>
+        {weekDeal ? <><p className="action-line">{weekDeal.scenario.line}</p><div className="poker-table"><div className="poker-table__hero"><CardRow cards={parseCards(weekDeal.hand)} size="medium" label={`Hero ${weekDeal.scenario.hero_pos}`} overlap /></div><div className="poker-table__meta"><span>{weekDeal.scenario.tag}</span><span>Hero {weekDeal.scenario.hero_pos}</span><span>{weekDeal.scenario.villain_pos ? `Villain ${weekDeal.scenario.villain_pos}` : "No villain yet"}</span><span>{weekDeal.handClass}</span></div></div><div className="action-grid">{weekDeal.scenario.actions.map(action => <button key={action} type="button" className="action-btn" disabled={Boolean(weekChoice)} onClick={() => pickWeekAction(action)}>{formatActionLabel(action)}</button>)}</div>{weekChoice ? <div className="result-panel"><span className={`badge ${weekCorrect ? "correct" : "wrong"}`}>{weekCorrect ? "Correct" : "Wrong"}</span><p>Correct action(s): <strong>{correctActions(weekDeal.scenario, weekDeal.handClass).map(formatActionLabel).join(" / ")}</strong></p><p className="meta">{weekDeal.scenario.note}</p><button type="button" onClick={dealWeek}>Next hand</button></div> : null}</> : <button type="button" onClick={dealWeek} disabled={!weeklock}>Deal hand</button>}
+      </div> : null}
 
       {scorecardOpen ? (
         <div className="card scorecard" aria-label="Session scorecard">
