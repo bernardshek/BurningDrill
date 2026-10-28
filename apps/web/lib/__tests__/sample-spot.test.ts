@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { DrillNode } from "../drill-node";
+import { comboIndexFromHand, handFromComboIndex } from "../combo1326";
+import { handClassFromCombo } from "../weeklock";
 import {
   filterNodesByDrillId,
   isCloseNode,
@@ -217,5 +219,106 @@ describe("filterNodesByDrillId", () => {
       "a",
       "b",
     ]);
+  });
+});
+
+describe("sampleSpot red hands", () => {
+  const board = ["2c", "3d", "4h"] as const;
+  const redCombo = comboIndexFromHand("7c2d");
+  const liveCombo = comboIndexFromHand("AcAd");
+  const redClass = handClassFromCombo(handFromComboIndex(redCombo));
+  const liveClass = handClassFromCombo(handFromComboIndex(liveCombo));
+
+  function scripted(values: number[]) {
+    let i = 0;
+    return () => values[i++] ?? 0;
+  }
+
+  it("leaves sampling unchanged when redHandClasses is omitted or empty", () => {
+    const nodes = [
+      makeNode({
+        id: "n",
+        bd: [...board],
+        combos: [{ c: redCombo, w: 1 }],
+      }),
+    ];
+    const base = sampleSpot(nodes, { pClose: 0, pWarmup: 0, random: () => 0 });
+    const empty = sampleSpot(nodes, {
+      pClose: 0,
+      pWarmup: 0,
+      random: () => 0,
+      redHandClasses: [],
+    });
+    expect(base?.heroHand).toBe(empty?.heroHand);
+    expect(handClassFromCombo(base!.heroHand)).toBe(redClass);
+    expect(base?.telemetry.rejectReasons.red_hand).toBeUndefined();
+  });
+
+  it("resamples when the hero class is red and keeps a non-red hand", () => {
+    const nodes = [
+      makeNode({
+        id: "mixed",
+        bd: [...board],
+        nf: 1,
+        combos: [
+          { c: redCombo, w: 1 },
+          { c: liveCombo, w: 1 },
+        ],
+      }),
+    ];
+    const hit = sampleSpot(nodes, {
+      pClose: 0,
+      pWarmup: 0,
+      redHandClasses: [redClass],
+      random: scripted([0, 0, 0, 0, 0, 0.99]),
+    });
+    expect(hit).not.toBeNull();
+    expect(handClassFromCombo(hit!.heroHand)).toBe(liveClass);
+    expect(redClass).not.toBe(liveClass);
+    expect(hit!.telemetry.rejectReasons.red_hand).toBe(1);
+  });
+
+  it("fails closed when every capped deal is red", () => {
+    const nodes = [
+      makeNode({
+        id: "only-red",
+        bd: [...board],
+        combos: [{ c: redCombo, w: 1 }],
+      }),
+    ];
+    let calls = 0;
+    const random = () => {
+      calls += 1;
+      return 0;
+    };
+    const hit = sampleSpot(nodes, {
+      pClose: 0,
+      pWarmup: 0,
+      redHandClasses: [redClass],
+      maxRedResamples: 2,
+      random,
+    });
+    expect(hit).toBeNull();
+    expect(calls).toBe(9);
+  });
+
+  it("rejects a red hand on the close-only path without changing the default", () => {
+    const nodes = [
+      makeNode({
+        id: "close-red",
+        bd: [...board],
+        combos: [{ c: redCombo, w: 1 }],
+      }),
+    ];
+    const bare = sampleSpot(nodes, { closeOnly: true, random: () => 0 });
+    expect(bare).not.toBeNull();
+    expect(handClassFromCombo(bare!.heroHand)).toBe(redClass);
+    const rejected = sampleSpot(nodes, {
+      closeOnly: true,
+      random: () => 0,
+      redHandClasses: [redClass],
+      maxRedResamples: 0,
+    });
+    expect(rejected).toBeNull();
   });
 });
