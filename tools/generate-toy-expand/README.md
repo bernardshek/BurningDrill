@@ -21,4 +21,6 @@ node tools/generate-toy-expand/generate-multistreet.mjs
 
 It reads the first four pinned boards from the expand pack's `flops-25.json`.
 The default seed is `0xb1`; set `TOY_MULTISTREET_SEED` to reproduce a different
-deterministic toy mix. Output goes to `packs/toy-6max-multistreet/`.
+deterministic toy mix. Check-check reaches a BTN river. The called 33% c-bet
+reaches a separate BTN river whose line matches the existing BB river node.
+Turn barrels end. Output goes to `packs/toy-6max-multistreet/`.

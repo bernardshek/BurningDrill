@@ -14,9 +14,12 @@
 - Board changes are carried only by child `bd` values. The four boards use distinct deterministic turn and river cards.
 - Toy action EV values and frequencies are generated as fixed pack data from a reproducible seed (`TOY_MULTISTREET_SEED`, default `0xb1`). They are not solver truth and no solver or dynamic grading code is in the web runtime.
 
+## PR-E walk
+
+Full Hand and Street deal only from `toy-6max-multistreet` (v0.1.1). Villain actions are sampled from that node's `actions[].m` and the walk follows that kid. The board changes only when the child `bd` is longer. The check-check line reaches `river_check`. The called 33% c-bet reaches `river_called` (the BTN river node whose line is the existing `river_bet` line); a river bet there lets BB act from `river_bet`. Turn barrels and the 75% flop bet still end on a null kid. Metrics count hero decisions. `ships_solver_code` stays false. Week lock `allowed_drill_ids` stays `btn_flop_cbet` and `bb_vs_cbet`.
+
 ## Known gaps
 
 - This is a small UX proof pack, not a complete BTN/BB game tree or solver-derived strategy. Some branches terminate at the thin-tree boundary.
 - Street mode starts from a stored decision on the selected street; its node's line metadata represents the fixed prior path rather than replaying every prior action onscreen.
-- Villain actions advance automatically; the interface currently shows the next node after a short delay rather than a separate animation/history log.
-- This checkout currently has no installed dependencies, so pnpm validation/typecheck/build/test commands may fail before execution until dependencies are available.
+- Villain actions advance automatically. The action line records the sampled action, then the walk follows that kid. There is no separate animation.

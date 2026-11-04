@@ -34,8 +34,23 @@ for(let f=0;f<4;f++){
  add(flopCheck,"flop","BB",bd,6.5,[act("check",.72,.35),act("bet_33",.28,.33,2.2)],[turnCheck,null],[...L,"BTN check"]);
  add(flopCall,"flop","BB",bd,8.7,[act("fold",.2,0),act("call",.7,.44),act("raise_2.5x",.1,.3,7.5)],[null,turnCall,null],[...L,"BTN bet 33%","BB to act"],"bet_33");
  add(flop,"flop","BTN",bd,6.5,[act("check",.55,.42),act("bet_33",.35,.45,2.2),act("bet_75",.1,.2,4.9)],[flopCheck,flopCall,null],L);
+ // One child per edge. Turn barrels have no emitted continuation (null).
+ // river_bet's line is the called-cbet, turn-check arrival; give that path its own BTN river
+ // by cloning river_check's menu (no extra RNG) and pointing the bet at river_bet.
+ const byId=(id)=>nodes.find((n)=>n.id===id);
+ const checkedRiver=byId(riverCheck), betRiver=byId(riverBet), callTurn=byId(turnCall);
+ byId(turnCheck).kids=[riverCheck,null];
+ const called=JSON.parse(JSON.stringify(checkedRiver));
+ called.id=`${base}_river_called`;
+ called.pot=callTurn.pot;
+ called.kids=[null,riverBet];
+ called.line_steps=[...betRiver.line_steps];
+ called.line=betRiver.line;
+ delete called.prior_action;
+ nodes.push(called);
+ callTurn.kids=[called.id,null];
 }
 for(const n of nodes) writeFileSync(join(out,"nodes",`${n.id}.json`),JSON.stringify(n,null,2)+"\n");
-const manifest={id:"toy-6max-multistreet",name:"Toy 6-max · BTN vs BB SRP Full Hand",version:"0.1.0",formatVersion:1,format:"drill_node_v1",table_size:6,game:"nlhe_cash",abstraction:"hu_after_folds",line:"BTN_vs_BB_SRP",game_lines:["flop","turn","river"],provenance:{kind:"toy_hybrid",practice:true,ships_solver_code:false,note:"Deterministic toy frequencies and EVs for Practice UX; not solver GTO."},flop_subset:"first four flops from toy-6max-expand/flops-25.json",nodes:nodes.map(n=>n.id)};
+const manifest={id:"toy-6max-multistreet",name:"Toy 6-max · BTN vs BB SRP Full Hand",version:"0.1.1",formatVersion:1,format:"drill_node_v1",table_size:6,game:"nlhe_cash",abstraction:"hu_after_folds",line:"BTN_vs_BB_SRP",game_lines:["flop","turn","river"],provenance:{kind:"toy_hybrid",practice:true,ships_solver_code:false,note:"Deterministic toy frequencies and EVs for Practice UX; not solver GTO."},flop_subset:"first four flops from toy-6max-expand/flops-25.json",nodes:nodes.map(n=>n.id)};
 writeFileSync(join(out,"manifest.json"),JSON.stringify(manifest,null,2)+"\n");
 console.log(`${nodes.length} nodes (seed ${SEED}); wrote ${out}`);

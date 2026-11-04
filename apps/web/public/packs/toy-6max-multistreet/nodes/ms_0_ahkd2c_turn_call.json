@@ -30,8 +30,8 @@
   "best": 1,
   "dev": 0.031,
   "kids": [
-    "ms_0_ahkd2c_river_check",
-    "ms_0_ahkd2c_river_bet"
+    "ms_0_ahkd2c_river_called",
+    null
   ],
   "combos": [
     {

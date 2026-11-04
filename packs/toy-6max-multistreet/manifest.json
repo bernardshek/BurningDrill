@@ -1,7 +1,7 @@
 {
   "id": "toy-6max-multistreet",
   "name": "Toy 6-max · BTN vs BB SRP Full Hand",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "formatVersion": 1,
   "format": "drill_node_v1",
   "table_size": 6,
@@ -28,6 +28,7 @@
     "ms_0_ahkd2c_flop_check",
     "ms_0_ahkd2c_flop_call",
     "ms_0_ahkd2c_flop",
+    "ms_0_ahkd2c_river_called",
     "ms_1_ah7d2c_river_check",
     "ms_1_ah7d2c_river_bet",
     "ms_1_ah7d2c_turn_check",
@@ -35,6 +36,7 @@
     "ms_1_ah7d2c_flop_check",
     "ms_1_ah7d2c_flop_call",
     "ms_1_ah7d2c_flop",
+    "ms_1_ah7d2c_river_called",
     "ms_2_ksqd2h_river_check",
     "ms_2_ksqd2h_river_bet",
     "ms_2_ksqd2h_turn_check",
@@ -42,12 +44,14 @@
     "ms_2_ksqd2h_flop_check",
     "ms_2_ksqd2h_flop_call",
     "ms_2_ksqd2h_flop",
+    "ms_2_ksqd2h_river_called",
     "ms_3_qh7d2c_river_check",
     "ms_3_qh7d2c_river_bet",
     "ms_3_qh7d2c_turn_check",
     "ms_3_qh7d2c_turn_call",
     "ms_3_qh7d2c_flop_check",
     "ms_3_qh7d2c_flop_call",
-    "ms_3_qh7d2c_flop"
+    "ms_3_qh7d2c_flop",
+    "ms_3_qh7d2c_river_called"
   ]
 }
