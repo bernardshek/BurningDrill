@@ -8,8 +8,9 @@ list + toy BTN open / BB defend ranges. v0.5.0 is four named flop drills
 node tools/generate-toy-expand/generate.mjs
 ```
 
-Frequencies/EV are **toy-consistent** (not solver GTO). Replace via offline
-pack-builder later. Never runs on Vercel.
+Frequencies/EV are **toy-consistent** (not solver GTO). A separate offline
+dump emitter lives in `tools/pack-builder` (`node tools/pack-builder/emit.mjs`).
+Never runs on Vercel.
 
 The separate thin Full Hand pack can be regenerated with:
 

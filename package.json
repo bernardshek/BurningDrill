@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "pnpm --filter @poker-trainer/web dev",
     "build": "pnpm --filter @poker-trainer/pack-format build && pnpm --filter @poker-trainer/web build",
-    "test": "pnpm --filter @poker-trainer/pack-format test && pnpm --filter @poker-trainer/web test",
+    "test": "pnpm --filter @poker-trainer/pack-format test && pnpm --filter @poker-trainer/web test && node --test tools/pack-builder/emit.test.mjs",
     "lint": "pnpm --filter @poker-trainer/web lint",
     "typecheck": "pnpm --filter @poker-trainer/pack-format typecheck && pnpm --filter @poker-trainer/web typecheck",
     "validate-packs": "pnpm --filter @poker-trainer/pack-format validate"

@@ -36,7 +36,7 @@ packs/toy-6max/                Slice-1 compact drill JSON
 packs/toy-6max-multistreet/    Flop/turn/river practice nodes
 packs/weeklock/                Week-lock fixture
 packs/examples/…               Full PackManifest fixture (CAS blob refs)
-tools/pack-builder/            Stub only — offline/CI solver runner lives here later
+tools/pack-builder/            Offline dump → pack emitter (no solver in CI or web)
 tools/generate-toy-expand/     Regenerates toy expand / multistreet JSON
 ```
 
@@ -73,16 +73,23 @@ EV loss (bb) = `max(0, bestEv − chosenEv)`.
 
 ## CI
 
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml) on push to `main` and on pull requests: `pnpm i --frozen-lockfile` → pack-format build → `pnpm test` → `pnpm typecheck` → sync packs → web build. No solver install.
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) on push to `main` and on pull requests: `pnpm i --frozen-lockfile` → pack-format build → `pnpm test` → `pnpm typecheck` → sync packs → web build. No solver install. Job `pack-builder-dump` re-emits `packs/solver-flop-proof` from the checked-in dump and diffs it. That job does not install a solver and does not build the web image.
 
 ## Deploy notes
 
 - Aimed at **Vercel Hobby**; do not deploy solvers.
 - AGPL: solvers offline/CI only — not legal advice; counsel before commercial launch.
 
+## Pack builder (offline)
+
+```bash
+node tools/pack-builder/emit.mjs
+```
+
+Reads a checked-in TexasSolver-style dump and writes `packs/solver-flop-proof` (compact drill nodes plus a PackManifest and blobs). It does not run a solver. `provenance.ships_solver_code` stays false. Details: [`tools/pack-builder/README.md`](tools/pack-builder/README.md).
+
 ## Next steps
 
-1. `tools/pack-builder` job that emits PackManifest + blobs
-2. R2 publish (`aws s3 sync` compatible) with immutable blob cache headers
-3. Multi-user Postgres behind the existing `user_id` stub
-4. Expand toy → real cash lines / table sizes
+1. R2 publish (`aws s3 sync` compatible) with immutable blob cache headers
+2. Multi-user Postgres behind the existing `user_id` stub
+3. Expand toy → real cash lines / table sizes
