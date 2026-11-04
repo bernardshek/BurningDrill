@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Spot } from "@poker-trainer/pack-format";
 import { loadPack, type LoadedPack } from "@/lib/load-pack";
@@ -532,6 +533,7 @@ export function DrillClient() {
         <button type="button" onClick={() => setMode("spot")}>Spot</button>
         <button type="button" className="secondary" onClick={() => setMode("street")}>Street</button>
         <button type="button" className="secondary" onClick={() => setMode("full_hand")}>Full Hand</button>
+        <Link href="/solver" className="text-button-secondary">Solver shell</Link>
       </div>
       <div className="card">
         <label className="field field-toggle">Week lock <span className="toggle-row"><input type="checkbox" checked={weeklockOn} onChange={e => toggleWeeklock(e.target.checked)} /><span className="meta">{weeklockOn ? "Spot limited to this week's drills" : "Full drill shelf"}</span></span></label>

@@ -20,6 +20,17 @@ export default function HomePage() {
         </Link>
       </div>
       <div className="card">
+        <h2>Solver shell</h2>
+        <p className="meta" style={{ marginBottom: "1rem" }}>
+          Browse the mix and EV already stored on a pack node. Read-only.
+          gradeDrillNode labels each action. No solve runs in the browser or
+          on Vercel.
+        </p>
+        <Link href="/solver" className="text-button">
+          Open solver shell →
+        </Link>
+      </div>
+      <div className="card">
         <h2>What this is not</h2>
         <ul className="meta">
           <li>No solver binaries in the deployable web app</li>

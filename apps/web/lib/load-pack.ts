@@ -19,7 +19,7 @@ export type LoadedPack = {
   flopCount?: number;
 };
 
-function toDrillNode(n: CompactDrillNode): DrillNode {
+export function toDrillNode(n: CompactDrillNode): DrillNode {
   const out: DrillNode = {
     id: n.id,
     st: n.st,
