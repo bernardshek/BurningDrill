@@ -1,0 +1,70 @@
+{
+  "id": "n_btn_bb_t_kd8c3h5s_btn",
+  "st": "turn",
+  "hp": "BTN",
+  "vp": "BB",
+  "ip": true,
+  "tx": "dry_broadway",
+  "bd": [
+    "Kd",
+    "8c",
+    "3h",
+    "5s"
+  ],
+  "pot": 6.5,
+  "eff": 97.5,
+  "nf": 1,
+  "wu": false,
+  "best": 1,
+  "dev": 0.36,
+  "actions": [
+    {
+      "a": "check",
+      "m": 0.11,
+      "ev": 0.174
+    },
+    {
+      "a": "bet_75",
+      "m": 0.89,
+      "ev": 0.534,
+      "sizeBb": 4.875
+    }
+  ],
+  "kids": [
+    null,
+    null
+  ],
+  "combos": [
+    {
+      "c": 463,
+      "w": 1
+    },
+    {
+      "c": 662,
+      "w": 1
+    },
+    {
+      "c": 901,
+      "w": 1
+    },
+    {
+      "c": 1268,
+      "w": 1
+    },
+    {
+      "c": 1317,
+      "w": 1
+    }
+  ],
+  "drill_id": "btn_delayed_barrel",
+  "line": "BTN open 2.5bb → BB call → Flop Kd8c3h → BTN check → BB check (capped) · Turn · Hero BTN to act",
+  "line_steps": [
+    "BTN open 2.5bb",
+    "BB call",
+    "Flop Kd8c3h",
+    "BTN check",
+    "BB check (capped)",
+    "Turn",
+    "Hero BTN to act"
+  ]
+}

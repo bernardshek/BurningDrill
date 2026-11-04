@@ -1,0 +1,130 @@
+{
+  "dumps": [
+    {
+      "format": "texassolver_dump_v1",
+      "solver": {
+        "name": "TexasSolver",
+        "version": "0.2.0",
+        "license": "AGPL-3.0",
+        "role": "offline_solve"
+      },
+      "built_at": "2026-11-04T07:40:00.000Z",
+      "pack": {
+        "id": "coach-shelf",
+        "version": "0.1.0",
+        "name": "Coach shelf delayed barrel"
+      },
+      "spot": {
+        "street": "turn",
+        "board": ["Ah", "7d", "2c", "4s"],
+        "pot": 6.5,
+        "effective_stack": 97.5,
+        "stack_bb": 100,
+        "table_size": 6,
+        "format": "cash",
+        "ip_position": "BTN",
+        "oop_position": "BB",
+        "abstraction": "hu_after_folds",
+        "drill_id": "btn_delayed_barrel",
+        "preflop_line_steps": [
+          "BTN open 2.5bb",
+          "BB call",
+          "Flop Ah7d2c",
+          "BTN check",
+          "BB check (capped)"
+        ]
+      },
+      "source": {
+        "note": "Checked-in sample in dumps() shape. BTN checked the flop back, BB checked a capped range, and the turn is a barrel. Frequencies are fixture data so CI can emit without installing TexasSolver."
+      },
+      "tree": {
+        "node_type": "action_node",
+        "player": 0,
+        "actions": ["CHECK", "BET 4.875000"],
+        "strategy": {
+          "actions": ["CHECK", "BET 4.875000"],
+          "strategy": {
+            "AsKd": [0.08, 0.92],
+            "AsQs": [0.1, 0.9],
+            "KcKd": [0.05, 0.95],
+            "9c9d": [0.12, 0.88],
+            "JcTc": [0.2, 0.8]
+          }
+        },
+        "evs": {
+          "actions": ["CHECK", "BET 4.875000"],
+          "evs": {
+            "AsKd": [0.2, 0.6],
+            "AsQs": [0.18, 0.55],
+            "KcKd": [0.22, 0.72],
+            "9c9d": [0.15, 0.45],
+            "JcTc": [0.12, 0.35]
+          }
+        }
+      }
+    },
+    {
+      "format": "texassolver_dump_v1",
+      "solver": {
+        "name": "TexasSolver",
+        "version": "0.2.0",
+        "license": "AGPL-3.0",
+        "role": "offline_solve"
+      },
+      "built_at": "2026-11-04T07:40:00.000Z",
+      "pack": {
+        "id": "coach-shelf",
+        "version": "0.1.0",
+        "name": "Coach shelf delayed barrel"
+      },
+      "spot": {
+        "street": "turn",
+        "board": ["Kd", "8c", "3h", "5s"],
+        "pot": 6.5,
+        "effective_stack": 97.5,
+        "stack_bb": 100,
+        "table_size": 6,
+        "format": "cash",
+        "ip_position": "BTN",
+        "oop_position": "BB",
+        "abstraction": "hu_after_folds",
+        "drill_id": "btn_delayed_barrel",
+        "preflop_line_steps": [
+          "BTN open 2.5bb",
+          "BB call",
+          "Flop Kd8c3h",
+          "BTN check",
+          "BB check (capped)"
+        ]
+      },
+      "source": {
+        "note": "Second dry turn in the same delayed-barrel fixture. Not a live solve."
+      },
+      "tree": {
+        "node_type": "action_node",
+        "player": 0,
+        "actions": ["CHECK", "BET 4.875000"],
+        "strategy": {
+          "actions": ["CHECK", "BET 4.875000"],
+          "strategy": {
+            "AsQh": [0.08, 0.92],
+            "AhQs": [0.1, 0.9],
+            "QcQh": [0.05, 0.95],
+            "9c9h": [0.12, 0.88],
+            "JcTc": [0.2, 0.8]
+          }
+        },
+        "evs": {
+          "actions": ["CHECK", "BET 4.875000"],
+          "evs": {
+            "AsQh": [0.2, 0.6],
+            "AhQs": [0.18, 0.55],
+            "QcQh": [0.22, 0.72],
+            "9c9h": [0.15, 0.45],
+            "JcTc": [0.12, 0.35]
+          }
+        }
+      }
+    }
+  ]
+}

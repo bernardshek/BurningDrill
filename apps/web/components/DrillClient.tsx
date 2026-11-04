@@ -19,6 +19,7 @@ import {
   formatTexture,
   gradeDrillNode,
   NAMED_DRILLS,
+  packIdForDrill,
   spotLeakTag,
   type DrillGrade,
   type DrillNode,
@@ -134,10 +135,18 @@ export function DrillClient() {
       return nodes.filter((n) => n.drill_id === shelf.drillId);
     }
     if (shelf.status === "open") {
+      const loadedId = pack && "id" in pack.manifest ? pack.manifest.id : "";
+      const home = packIdForDrill(settings.drillId);
+      const wrongPack =
+        (home != null && loadedId !== home) ||
+        (home == null &&
+          loadedId === "coach-shelf" &&
+          settings.drillId !== "all");
+      if (wrongPack) return nodes.filter((n) => n.drill_id === settings.drillId);
       return filterNodesByDrillId(nodes, settings.drillId);
     }
     return [];
-  }, [nodes, settings.drillId, shelf]);
+  }, [nodes, settings.drillId, shelf, pack]);
   const dealRed =
     shelf.status === "ready" && redHandClasses.length > 0
       ? redHandClasses
@@ -296,6 +305,18 @@ export function DrillClient() {
       }
       return;
     }
+    if (settings.packId !== "toy-6max-expand") {
+      const next = {
+        ...settings,
+        packId: "toy-6max-expand",
+        drillId: resolved.drillId,
+      };
+      setSettings(next);
+      void load(next);
+      return;
+    }
+    const loadedId = pack && "id" in pack.manifest ? pack.manifest.id : "";
+    if (loadedId && loadedId !== "toy-6max-expand") return;
     if (nodes.length === 0) return;
     if (active?.node.drill_id === resolved.drillId) return;
     setChosen(null);
@@ -316,7 +337,7 @@ export function DrillClient() {
     // Deal only when week lock turns on or its pack arrives. Dropdown changes
     // still wait for Load / Random, matching the weeklock-off shelf.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [weeklockOn, weeklock]);
+  }, [weeklockOn, weeklock, settings.packId, load]);
 
   function onPick(action: string) {
     if (!node || !active || chosen) return;
@@ -430,7 +451,13 @@ export function DrillClient() {
   }
 
   function onDrillChange(drillId: string) {
-    setSettings((s) => ({ ...s, drillId }));
+    const mapped = packIdForDrill(drillId);
+    const packId =
+      mapped ??
+      (settings.packId === "coach-shelf" ? "toy-6max-expand" : settings.packId);
+    const next = { ...settings, drillId, packId };
+    setSettings(next);
+    if (packId !== settings.packId) void load(next);
   }
 
   function endSession() {
@@ -480,10 +507,14 @@ export function DrillClient() {
     );
   }
 
+  const manifestId =
+    pack && "id" in pack.manifest ? pack.manifest.id : "";
   const flopLabel =
-    pack?.flopCount != null
-      ? `${pack.flopCount}-flop study subset · not every Hold’em flop`
-      : "Study subset · deals reshuffle from this pack";
+    manifestId === "coach-shelf"
+      ? "Coach shelf · chart locks and the delayed barrel grade from the pack"
+      : pack?.flopCount != null
+        ? `${pack.flopCount}-flop study subset · not every Hold’em flop`
+        : "Study subset · deals reshuffle from this pack";
 
   const drillMeta = NAMED_DRILLS.find(
     (d) => d.id === (shelf.status === "blocked" ? "" : shelf.drillId),
@@ -577,6 +608,9 @@ export function DrillClient() {
                 setSettings((s) => ({ ...s, packId: e.target.value }))
               }
             >
+              <option value="coach-shelf">
+                Coach shelf (vs 3-bet / vs 4-bet / delayed barrel)
+              </option>
               <option value="toy-6max-expand">
                 25-flop expand (Practice / toy)
               </option>

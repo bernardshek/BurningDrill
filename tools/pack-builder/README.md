@@ -15,8 +15,11 @@ That reads `tools/pack-builder/fixtures/texassolver-flop-srp.json` and writes `p
 ```bash
 node tools/pack-builder/emit.mjs --dump path/to/envelope.json --out packs/solver-flop-proof
 node tools/pack-builder/emit.mjs --check
+node tools/pack-builder/emit.mjs --dump tools/pack-builder/fixtures/coach-shelf.json --out packs/coach-shelf
 node apps/web/scripts/sync-packs.mjs
 ```
+
+`coach-shelf.json` is `chart_shelf_v1`. It reads the vs3bet / vs4bet charts from `packs/weeklock/weeklock.json` (no RFI) and the delayed-barrel turn dumps in `fixtures/texassolver-turn-delayed-barrel.json`. Output is `packs/coach-shelf/`, a compact drill pack. Those drills show on the full shelf only. The week lock allowlist is not an input and is not rewritten.
 
 `--check` rebuilds in memory and diffs the output directory. It does not solve. After a real emit, sync packs so `apps/web/public/packs/` matches.
 

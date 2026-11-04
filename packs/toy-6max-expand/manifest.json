@@ -12,7 +12,7 @@
     "kind": "toy_hybrid",
     "practice": true,
     "ships_solver_code": false,
-    "note": "Toy-consistent mix/EV for study UX. Not solver GTO. Named drills (btn_flop_cbet / bb_vs_cbet / bb_flop_donk / btn_vs_donk) + line_steps for action chrome. True GTO needs offline solver expand later."
+    "note": "Toy-consistent mix/EV for study UX. Not solver GTO. Named drills (btn_flop_cbet / bb_vs_cbet / bb_flop_donk / btn_vs_donk) + line_steps for action chrome. Dry and paired bb_vs_cbet nodes raise the 33% c-bet (raise best, call in mix, fold the miss). True GTO needs offline solver expand later."
   },
   "flop_subset": "flops-25.json",
   "nodes": [

@@ -1,3 +1,5 @@
+import { packIdForDrill } from "./drill-node";
+
 export type DrillSettings = {
   format: "cash";
   tableSize: 6 | 9;
@@ -35,6 +37,8 @@ export function loadSavedDrill(): DrillSettings | null {
       typeof parsed.drillId === "string" && parsed.drillId.length > 0
         ? parsed.drillId
         : DEFAULT_SETTINGS.drillId;
+    const home = packIdForDrill(drillId);
+    if (home) packId = home;
     return {
       ...DEFAULT_SETTINGS,
       ...parsed,

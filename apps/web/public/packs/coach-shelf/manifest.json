@@ -1,0 +1,39 @@
+{
+  "id": "coach-shelf",
+  "name": "Coach shelf · vs 3-bet, vs 4-bet, delayed barrel",
+  "version": "0.1.0",
+  "formatVersion": 1,
+  "format": "drill_node_v1",
+  "table_size": 6,
+  "game": "nlhe_cash",
+  "abstraction": "coach_nl5",
+  "line": "COACH_SHELF",
+  "game_lines": [
+    "preflop",
+    "turn"
+  ],
+  "provenance": {
+    "kind": "coach_chart",
+    "practice": true,
+    "ships_solver_code": false,
+    "note": "Preflop nodes are the weeklock charts for vs3bet_oop, vs3bet_ip, vs4bet_jam, and vs4bet_22 (deal_from only, no RFI). Action EV is a lock gap so gradeDrillNode matches the chart, not a solver solve. btn_delayed_barrel is emitted from a checked-in turn dump fixture. No solver code ships."
+  },
+  "nodes": [
+    "n_vs3bet_oop_4bet",
+    "n_vs3bet_oop_4bet_call",
+    "n_vs3bet_oop_call",
+    "n_vs3bet_oop_fold",
+    "n_vs3bet_ip_4bet",
+    "n_vs3bet_ip_4bet_call",
+    "n_vs3bet_ip_call",
+    "n_vs3bet_ip_fold",
+    "n_vs4bet_jam_5bet_jam",
+    "n_vs4bet_jam_call",
+    "n_vs4bet_jam_fold",
+    "n_vs4bet_22_5bet_jam",
+    "n_vs4bet_22_call",
+    "n_vs4bet_22_fold",
+    "n_btn_bb_t_ah7d2c4s_btn",
+    "n_btn_bb_t_kd8c3h5s_btn"
+  ]
+}

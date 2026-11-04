@@ -22,6 +22,7 @@ jobs:
       - run: pnpm --filter @poker-trainer/pack-format build
       - run: pnpm test
         # Includes tools/pack-builder tests against the checked-in dump.
+      - run: pnpm validate-packs
       - run: pnpm typecheck
       - run: pnpm --filter @poker-trainer/web exec node scripts/sync-packs.mjs
       - run: pnpm --filter @poker-trainer/web build
@@ -36,5 +37,6 @@ jobs:
         with:
           node-version: "20"
       - run: node tools/pack-builder/emit.mjs --check
+      - run: node tools/pack-builder/emit.mjs --dump tools/pack-builder/fixtures/coach-shelf.json --out packs/coach-shelf --check
       - run: node --test tools/pack-builder/emit.test.mjs
         # Dump JSON only. Does not install TexasSolver or build the web image.

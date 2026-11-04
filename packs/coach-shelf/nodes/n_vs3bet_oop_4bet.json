@@ -1,0 +1,93 @@
+{
+  "id": "n_vs3bet_oop_4bet",
+  "st": "preflop",
+  "hp": "CO",
+  "vp": "BTN",
+  "ip": false,
+  "bd": [],
+  "pot": 12,
+  "eff": 97.5,
+  "nf": 12,
+  "wu": false,
+  "best": 2,
+  "dev": 0.12,
+  "actions": [
+    {
+      "a": "fold",
+      "m": 0,
+      "ev": 0
+    },
+    {
+      "a": "call",
+      "m": 0,
+      "ev": 0
+    },
+    {
+      "a": "4bet",
+      "m": 1,
+      "ev": 0.12
+    }
+  ],
+  "kids": [
+    null,
+    null,
+    null
+  ],
+  "combos": [
+    {
+      "c": 1034,
+      "w": 1
+    },
+    {
+      "c": 1079,
+      "w": 1
+    },
+    {
+      "c": 1080,
+      "w": 1
+    },
+    {
+      "c": 1125,
+      "w": 1
+    },
+    {
+      "c": 1126,
+      "w": 1
+    },
+    {
+      "c": 1127,
+      "w": 1
+    },
+    {
+      "c": 1224,
+      "w": 1
+    },
+    {
+      "c": 1273,
+      "w": 1
+    },
+    {
+      "c": 1274,
+      "w": 1
+    },
+    {
+      "c": 1323,
+      "w": 1
+    },
+    {
+      "c": 1324,
+      "w": 1
+    },
+    {
+      "c": 1325,
+      "w": 1
+    }
+  ],
+  "drill_id": "vs3bet_oop",
+  "line": "You open CO 2.5x, BTN 3bets to 8bb. You are out of position, 100bb.",
+  "line_steps": [
+    "CO open 2.5bb",
+    "BTN 3bet to 8bb",
+    "Hero CO to act"
+  ]
+}

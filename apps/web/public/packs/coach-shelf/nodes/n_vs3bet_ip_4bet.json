@@ -1,0 +1,93 @@
+{
+  "id": "n_vs3bet_ip_4bet",
+  "st": "preflop",
+  "hp": "BTN",
+  "vp": "BB",
+  "ip": true,
+  "bd": [],
+  "pot": 13,
+  "eff": 97.5,
+  "nf": 12,
+  "wu": false,
+  "best": 2,
+  "dev": 0.12,
+  "actions": [
+    {
+      "a": "fold",
+      "m": 0,
+      "ev": 0
+    },
+    {
+      "a": "call",
+      "m": 0,
+      "ev": 0
+    },
+    {
+      "a": "4bet",
+      "m": 1,
+      "ev": 0.12
+    }
+  ],
+  "kids": [
+    null,
+    null,
+    null
+  ],
+  "combos": [
+    {
+      "c": 1034,
+      "w": 1
+    },
+    {
+      "c": 1079,
+      "w": 1
+    },
+    {
+      "c": 1080,
+      "w": 1
+    },
+    {
+      "c": 1125,
+      "w": 1
+    },
+    {
+      "c": 1126,
+      "w": 1
+    },
+    {
+      "c": 1127,
+      "w": 1
+    },
+    {
+      "c": 1224,
+      "w": 1
+    },
+    {
+      "c": 1273,
+      "w": 1
+    },
+    {
+      "c": 1274,
+      "w": 1
+    },
+    {
+      "c": 1323,
+      "w": 1
+    },
+    {
+      "c": 1324,
+      "w": 1
+    },
+    {
+      "c": 1325,
+      "w": 1
+    }
+  ],
+  "drill_id": "vs3bet_ip",
+  "line": "You open BTN 2.5x, BB 3bets to 10bb. You are in position, 100bb.",
+  "line_steps": [
+    "BTN open 2.5bb",
+    "BB 3bet to 10bb",
+    "Hero BTN to act"
+  ]
+}

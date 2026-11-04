@@ -200,6 +200,13 @@ function validateEnvelope(dump) {
       fail("spot.preflop_line_steps must be an array of strings");
     }
   }
+  let drillId = null;
+  if (spot.drill_id != null) {
+    if (typeof spot.drill_id !== "string" || !/^[a-z][a-z0-9_]{0,63}$/.test(spot.drill_id)) {
+      fail("spot.drill_id must be a lowercase drill id");
+    }
+    drillId = spot.drill_id;
+  }
   requireObject(dump.tree, "tree");
   if (dump.tree.node_type !== "action_node") fail("tree root must be an action_node");
   return {
@@ -217,6 +224,7 @@ function validateEnvelope(dump) {
       oop_position: spot.oop_position,
       abstraction,
       preflop_line_steps: spot.preflop_line_steps ?? [],
+      drill_id: drillId,
     },
     handWeights: weightMap(dump.hand_weights),
     tree: dump.tree,
@@ -361,6 +369,7 @@ function idSuffix(spot, player, path) {
 }
 
 function drillIdFor(spot, player, facing) {
+  if (spot.drill_id) return spot.drill_id;
   if (spot.street === "flop" && spot.ip_position === "BTN" && spot.oop_position === "BB") {
     if (player === 0 && !facing) return "btn_flop_cbet";
     if (player === 1 && !facing) return "bb_flop_donk";

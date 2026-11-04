@@ -1,0 +1,40 @@
+{
+  "format": "chart_shelf_v1",
+  "weeklock": "packs/weeklock/weeklock.json",
+  "turn_dumps": "texassolver-turn-delayed-barrel.json",
+  "pack": {
+    "id": "coach-shelf",
+    "version": "0.1.0",
+    "name": "Coach shelf · vs 3-bet, vs 4-bet, delayed barrel"
+  },
+  "scenarios": [
+    {
+      "id": "vs3bet_oop",
+      "ip": false,
+      "pot": 12,
+      "eff": 97.5,
+      "line_steps": ["CO open 2.5bb", "BTN 3bet to 8bb", "Hero CO to act"]
+    },
+    {
+      "id": "vs3bet_ip",
+      "ip": true,
+      "pot": 13,
+      "eff": 97.5,
+      "line_steps": ["BTN open 2.5bb", "BB 3bet to 10bb", "Hero BTN to act"]
+    },
+    {
+      "id": "vs4bet_jam",
+      "ip": true,
+      "pot": 111.5,
+      "eff": 92,
+      "line_steps": ["Hero 3bet to 8bb", "BB 4bet all-in", "Hero BTN to act"]
+    },
+    {
+      "id": "vs4bet_22",
+      "ip": true,
+      "pot": 35,
+      "eff": 91,
+      "line_steps": ["Hero 3bet to 9bb", "BTN 4bet to 22bb", "Hero CO to act"]
+    }
+  ]
+}
