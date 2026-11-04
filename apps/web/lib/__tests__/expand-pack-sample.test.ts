@@ -75,6 +75,20 @@ describe("expand pack named drills + line chrome", () => {
       expect(n.prior_action).toBe("bet_33");
       expect(n.line_steps?.some((s) => s.includes("bet 33"))).toBe(true);
       expect(n.hp).toBe("BB");
+      expect(n.actions.map((a) => a.a)).toEqual(["fold", "call", "raise_2.5x"]);
+    }
+    const exploit = bb.filter(
+      (n) => n.tx?.startsWith("dry_") || n.tx?.startsWith("paired_"),
+    );
+    expect(exploit.length).toBeGreaterThanOrEqual(8);
+    for (const n of exploit) {
+      expect(n.actions[n.best]?.a).toBe("raise_2.5x");
+      const raise = n.actions.find((a) => a.a === "raise_2.5x");
+      const call = n.actions.find((a) => a.a === "call");
+      const fold = n.actions.find((a) => a.a === "fold");
+      expect(raise?.m).toBeGreaterThanOrEqual(0.15);
+      expect(call?.m).toBeGreaterThanOrEqual(0.15);
+      expect(fold?.m).toBeLessThan(0.15);
     }
     for (const n of donk) {
       expect(n.hp).toBe("BB");
@@ -137,12 +151,18 @@ describe("expand pack named drills + line chrome", () => {
 describe("spot drill shelf", () => {
   it("lists four real drills plus All", () => {
     expect(NAMED_DRILLS.map((d) => d.id)).toEqual([
+      "vs3bet_oop",
+      "vs3bet_ip",
+      "vs4bet_jam",
+      "vs4bet_22",
+      "btn_delayed_barrel",
       "btn_flop_cbet",
       "bb_vs_cbet",
       "bb_flop_donk",
       "btn_vs_donk",
       "all",
     ]);
+    expect(NAMED_DRILLS.some((d) => d.id.startsWith("rfi_"))).toBe(false);
   });
 
   it("maps donk drills to other and keeps c-bet on the cbet leak row", () => {

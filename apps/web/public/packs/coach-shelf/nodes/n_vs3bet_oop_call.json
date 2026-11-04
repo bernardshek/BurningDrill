@@ -1,0 +1,109 @@
+{
+  "id": "n_vs3bet_oop_call",
+  "st": "preflop",
+  "hp": "CO",
+  "vp": "BTN",
+  "ip": false,
+  "bd": [],
+  "pot": 12,
+  "eff": 97.5,
+  "nf": 16,
+  "wu": false,
+  "best": 1,
+  "dev": 0.12,
+  "actions": [
+    {
+      "a": "fold",
+      "m": 0,
+      "ev": 0
+    },
+    {
+      "a": "call",
+      "m": 1,
+      "ev": 0.12
+    },
+    {
+      "a": "4bet",
+      "m": 0,
+      "ev": 0
+    }
+  ],
+  "kids": [
+    null,
+    null,
+    null
+  ],
+  "combos": [
+    {
+      "c": 560,
+      "w": 1
+    },
+    {
+      "c": 593,
+      "w": 1
+    },
+    {
+      "c": 594,
+      "w": 1
+    },
+    {
+      "c": 627,
+      "w": 1
+    },
+    {
+      "c": 628,
+      "w": 1
+    },
+    {
+      "c": 629,
+      "w": 1
+    },
+    {
+      "c": 702,
+      "w": 1
+    },
+    {
+      "c": 739,
+      "w": 1
+    },
+    {
+      "c": 740,
+      "w": 1
+    },
+    {
+      "c": 777,
+      "w": 1
+    },
+    {
+      "c": 778,
+      "w": 1
+    },
+    {
+      "c": 779,
+      "w": 1
+    },
+    {
+      "c": 1168,
+      "w": 1
+    },
+    {
+      "c": 1217,
+      "w": 1
+    },
+    {
+      "c": 1267,
+      "w": 1
+    },
+    {
+      "c": 1318,
+      "w": 1
+    }
+  ],
+  "drill_id": "vs3bet_oop",
+  "line": "You open CO 2.5x, BTN 3bets to 8bb. You are out of position, 100bb.",
+  "line_steps": [
+    "CO open 2.5bb",
+    "BTN 3bet to 8bb",
+    "Hero CO to act"
+  ]
+}

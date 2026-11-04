@@ -1,0 +1,93 @@
+{
+  "id": "n_vs4bet_jam_5bet_jam",
+  "st": "preflop",
+  "hp": "BTN",
+  "vp": "BB",
+  "ip": true,
+  "bd": [],
+  "pot": 111.5,
+  "eff": 92,
+  "nf": 12,
+  "wu": false,
+  "best": 2,
+  "dev": 0.12,
+  "actions": [
+    {
+      "a": "fold",
+      "m": 0,
+      "ev": 0
+    },
+    {
+      "a": "call",
+      "m": 0,
+      "ev": 0
+    },
+    {
+      "a": "5bet_jam",
+      "m": 1,
+      "ev": 0.12
+    }
+  ],
+  "kids": [
+    null,
+    null,
+    null
+  ],
+  "combos": [
+    {
+      "c": 1034,
+      "w": 1
+    },
+    {
+      "c": 1079,
+      "w": 1
+    },
+    {
+      "c": 1080,
+      "w": 1
+    },
+    {
+      "c": 1125,
+      "w": 1
+    },
+    {
+      "c": 1126,
+      "w": 1
+    },
+    {
+      "c": 1127,
+      "w": 1
+    },
+    {
+      "c": 1224,
+      "w": 1
+    },
+    {
+      "c": 1273,
+      "w": 1
+    },
+    {
+      "c": 1274,
+      "w": 1
+    },
+    {
+      "c": 1323,
+      "w": 1
+    },
+    {
+      "c": 1324,
+      "w": 1
+    },
+    {
+      "c": 1325,
+      "w": 1
+    }
+  ],
+  "drill_id": "vs4bet_jam",
+  "line": "You 3bet to 8bb, BB 4bets all-in (about 100bb). Call, fold, or jam.",
+  "line_steps": [
+    "Hero 3bet to 8bb",
+    "BB 4bet all-in",
+    "Hero BTN to act"
+  ]
+}

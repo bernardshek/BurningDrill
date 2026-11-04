@@ -348,6 +348,30 @@ function finalize(actions) {
   return { actions: out, best, dev, wu };
 }
 
+/**
+ * Dry and paired flops: raising BTN's 33% c-bet is the exploit.
+ * Raise is best, call stays in the mix, fold is the miss.
+ * Does not draw RNG, so the other toy nodes stay on the same seed path.
+ */
+function deepenRaiseVsSmallCbet(node) {
+  const tx = node.tx || "";
+  if (!tx.startsWith("dry_") && !tx.startsWith("paired_")) return;
+  const fold = node.actions.find((a) => a.a === "fold");
+  const call = node.actions.find((a) => a.a === "call");
+  const raise = node.actions.find((a) => a.a === "raise_2.5x");
+  if (!fold || !call || !raise) return;
+  fold.m = 0.12;
+  call.m = 0.46;
+  raise.m = 0.42;
+  const ceiling = Math.max(fold.ev, call.ev);
+  raise.ev = Math.round((ceiling + 0.08) * 1000) / 1000;
+  const next = finalize(node.actions);
+  node.actions = next.actions;
+  node.best = next.best;
+  node.dev = next.dev;
+  node.wu = next.wu;
+}
+
 
 const DRILL_BTN = "btn_flop_cbet";
 const DRILL_BB = "bb_vs_cbet";
@@ -498,6 +522,7 @@ function main() {
         line_steps: lineMeta.line_steps,
         prior_action: lineMeta.prior_action,
       };
+      deepenRaiseVsSmallCbet(node);
       nodes.push(node);
       totalCombos += combos.length;
       writeFileSync(join(nodesDir, `${id}.json`), JSON.stringify(node, null, 2) + "\n");
@@ -600,7 +625,7 @@ function main() {
       kind: "toy_hybrid",
       practice: true,
       ships_solver_code: false,
-      note: "Toy-consistent mix/EV for study UX. Not solver GTO. Named drills (btn_flop_cbet / bb_vs_cbet / bb_flop_donk / btn_vs_donk) + line_steps for action chrome. True GTO needs offline solver expand later.",
+      note: "Toy-consistent mix/EV for study UX. Not solver GTO. Named drills (btn_flop_cbet / bb_vs_cbet / bb_flop_donk / btn_vs_donk) + line_steps for action chrome. Dry and paired bb_vs_cbet nodes raise the 33% c-bet (raise best, call in mix, fold the miss). True GTO needs offline solver expand later.",
     },
     flop_subset: "flops-25.json",
     nodes: nodes.map((n) => n.id),

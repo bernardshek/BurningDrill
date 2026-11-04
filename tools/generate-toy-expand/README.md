@@ -3,6 +3,7 @@
 Emits `packs/toy-6max-expand/` compact DrillNodes from the pinned `flops-25.json`
 list + toy BTN open / BB defend ranges. v0.5.0 is four named flop drills
 (btn_flop_cbet, bb_vs_cbet, bb_flop_donk, btn_vs_donk) — 25 nodes each.
+Dry and paired `bb_vs_cbet` nodes raise the 33% c-bet: raise is best, call stays in the mix, fold is the miss.
 
 ```bash
 node tools/generate-toy-expand/generate.mjs

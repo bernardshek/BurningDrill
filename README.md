@@ -32,9 +32,10 @@ Requires **Node 20+** and **pnpm**.
 apps/web/                      Next.js UI (Vercel Hobby target)
 packages/pack-format/          Zod PackManifest (CDN) + compact drill spots + scoring
 packs/toy-6max-expand/         Default drill pack v0.5.0 (synced → public/packs)
+packs/coach-shelf/             Vs 3-bet / vs 4-bet chart drills + delayed barrel
 packs/toy-6max/                Slice-1 compact drill JSON
 packs/toy-6max-multistreet/    Flop/turn/river practice nodes
-packs/weeklock/                Week-lock fixture
+packs/weeklock/                Week-lock fixture (2026-w43 allowlist stays two flop drills)
 packs/examples/…               Full PackManifest fixture (CAS blob refs)
 tools/pack-builder/            Offline dump → pack emitter (no solver in CI or web)
 tools/generate-toy-expand/     Regenerates toy expand / multistreet JSON
@@ -86,7 +87,13 @@ EV loss (bb) = `max(0, bestEv − chosenEv)`.
 node tools/pack-builder/emit.mjs
 ```
 
-Reads a checked-in TexasSolver-style dump and writes `packs/solver-flop-proof` (compact drill nodes plus a PackManifest and blobs). It does not run a solver. `provenance.ships_solver_code` stays false. Details: [`tools/pack-builder/README.md`](tools/pack-builder/README.md).
+Reads a checked-in TexasSolver-style dump and writes `packs/solver-flop-proof` (compact drill nodes plus a PackManifest and blobs). The coach shelf is the same emitter with a chart spec:
+
+```bash
+node tools/pack-builder/emit.mjs --dump tools/pack-builder/fixtures/coach-shelf.json --out packs/coach-shelf
+```
+
+It does not run a solver. `provenance.ships_solver_code` stays false. Week lock `allowed_drill_ids` stays `btn_flop_cbet` and `bb_vs_cbet`. Details: [`tools/pack-builder/README.md`](tools/pack-builder/README.md).
 
 ## Next steps
 

@@ -86,17 +86,51 @@ export type DrillNode = {
 };
 
 export type DrillId =
+  | "vs3bet_oop"
+  | "vs3bet_ip"
+  | "vs4bet_jam"
+  | "vs4bet_22"
+  | "btn_delayed_barrel"
   | "btn_flop_cbet"
   | "bb_vs_cbet"
   | "bb_flop_donk"
   | "btn_vs_donk"
   | "all";
 
+/**
+ * Weeklock-off shelf. New curriculum leads; donk stays last and is not
+ * promoted. Week lock allowlist is a separate list and does not grow here.
+ */
 export const NAMED_DRILLS: {
   id: DrillId;
   label: string;
   blurb: string;
 }[] = [
+  {
+    id: "vs3bet_oop",
+    label: "Vs 3-bet OOP",
+    blurb: "CO open, BTN 3-bets to 8bb. Fold, call, or 4-bet.",
+  },
+  {
+    id: "vs3bet_ip",
+    label: "Vs 3-bet IP",
+    blurb: "BTN open, BB 3-bets to 10bb. Fold, call, or 4-bet in position.",
+  },
+  {
+    id: "vs4bet_jam",
+    label: "Vs 4-bet jam",
+    blurb: "Facing a 4-bet jam: continue with QQ+ and AK. JJ and below fold.",
+  },
+  {
+    id: "vs4bet_22",
+    label: "Vs 4-bet 22bb",
+    blurb: "Facing a 4-bet to 22bb: jam AA/KK, call QQ/AK, fold JJ and the rest.",
+  },
+  {
+    id: "btn_delayed_barrel",
+    label: "BTN delayed barrel",
+    blurb: "Flop checked through and BB is capped. Barrel the turn.",
+  },
   {
     id: "btn_flop_cbet",
     label: "BTN flop c-bet",
@@ -105,7 +139,7 @@ export const NAMED_DRILLS: {
   {
     id: "bb_vs_cbet",
     label: "BB vs c-bet",
-    blurb: "Fold / call / raise facing BTN bet 33%",
+    blurb: "Facing the 33% c-bet: fold, call, or raise. Raise is the exploit on dry and paired boards.",
   },
   {
     id: "bb_flop_donk",
@@ -123,6 +157,21 @@ export const NAMED_DRILLS: {
     blurb: "All four flop decisions from this pack",
   },
 ];
+
+/** Pack that owns a shelf drill. Flop toy drills stay on toy-6max-expand. */
+export const COACH_SHELF_DRILL_IDS = [
+  "vs3bet_oop",
+  "vs3bet_ip",
+  "vs4bet_jam",
+  "vs4bet_22",
+  "btn_delayed_barrel",
+] as const;
+
+export function packIdForDrill(drillId: string): "coach-shelf" | null {
+  return (COACH_SHELF_DRILL_IDS as readonly string[]).includes(drillId)
+    ? "coach-shelf"
+    : null;
+}
 
 /**
  * Spot session tag for LeaksPanel.

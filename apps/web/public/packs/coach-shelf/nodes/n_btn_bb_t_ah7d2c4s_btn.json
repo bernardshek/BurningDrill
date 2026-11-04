@@ -1,0 +1,70 @@
+{
+  "id": "n_btn_bb_t_ah7d2c4s_btn",
+  "st": "turn",
+  "hp": "BTN",
+  "vp": "BB",
+  "ip": true,
+  "tx": "dry_a_high",
+  "bd": [
+    "Ah",
+    "7d",
+    "2c",
+    "4s"
+  ],
+  "pot": 6.5,
+  "eff": 97.5,
+  "nf": 1,
+  "wu": false,
+  "best": 1,
+  "dev": 0.36,
+  "actions": [
+    {
+      "a": "check",
+      "m": 0.11,
+      "ev": 0.174
+    },
+    {
+      "a": "bet_75",
+      "m": 0.89,
+      "ev": 0.534,
+      "sizeBb": 4.875
+    }
+  ],
+  "kids": [
+    null,
+    null
+  ],
+  "combos": [
+    {
+      "c": 434,
+      "w": 1
+    },
+    {
+      "c": 662,
+      "w": 1
+    },
+    {
+      "c": 1034,
+      "w": 1
+    },
+    {
+      "c": 1318,
+      "w": 1
+    },
+    {
+      "c": 1320,
+      "w": 1
+    }
+  ],
+  "drill_id": "btn_delayed_barrel",
+  "line": "BTN open 2.5bb → BB call → Flop Ah7d2c → BTN check → BB check (capped) · Turn · Hero BTN to act",
+  "line_steps": [
+    "BTN open 2.5bb",
+    "BB call",
+    "Flop Ah7d2c",
+    "BTN check",
+    "BB check (capped)",
+    "Turn",
+    "Hero BTN to act"
+  ]
+}

@@ -9,6 +9,8 @@ export function formatActionLabel(action: string, sizeBb?: number): string {
     bet_66: "Bet 66%",
     bet_100: "Bet pot",
     raise_pot: "Raise pot",
+    "4bet": "4-bet",
+    "5bet_jam": "5-bet jam",
   };
   if (map[action]) {
     return sizeBb != null && !map[action].includes("Bet") && !map[action].includes("Raise")

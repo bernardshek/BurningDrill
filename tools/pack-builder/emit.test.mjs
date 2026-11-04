@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { renderCoachShelf } from "./chart-shelf.mjs";
 import {
   DumpError,
   comboIndexFromHand,
@@ -117,6 +118,32 @@ test("weights hands when aggregating mix and ev", () => {
   assert.equal(nodes[0].actions[0].ev, 0.25);
   assert.equal(nodes[0].actions[1].ev, 3);
   assert.equal(nodes[0].best, 1);
+});
+
+test("coach shelf emit matches the committed pack and does not ship solver code", () => {
+  const spec = JSON.parse(readFileSync(join(here, "fixtures/coach-shelf.json"), "utf8"));
+  const { files, compact, nodes } = renderCoachShelf(spec, {
+    root,
+    dumpDir: join(here, "fixtures"),
+  });
+  assert.equal(compact.provenance.ships_solver_code, false);
+  assert.equal(nodes.some((node) => String(node.drill_id).startsWith("rfi_")), false);
+  assert.equal(nodes.some((node) => node.drill_id === "bb_flop_donk" || node.drill_id === "btn_vs_donk"), false);
+  const order = [];
+  for (const node of nodes) {
+    if (!order.includes(node.drill_id)) order.push(node.drill_id);
+  }
+  assert.deepEqual(order, [
+    "vs3bet_oop",
+    "vs3bet_ip",
+    "vs4bet_jam",
+    "vs4bet_22",
+    "btn_delayed_barrel",
+  ]);
+  const names = Object.keys(files);
+  assert.ok(names.every((name) => !/\.(cpp|cc|h|hpp|exe|wasm|so|dylib|dll)$/i.test(name)));
+  assert.deepEqual(diffPackFiles(join(root, "packs/coach-shelf"), files), []);
+  assert.deepEqual(diffPackFiles(join(root, "apps/web/public/packs/coach-shelf"), files), []);
 });
 
 test("proof pack contains no solver binary or source", () => {
