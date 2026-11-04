@@ -283,6 +283,76 @@ button:disabled {
   font-weight: 650;
 }
 
+a.text-button {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  font-weight: 600;
+}
+a.text-button:hover {
+  background: var(--accent-hover);
+  color: #fff;
+  text-decoration: none;
+}
+a.text-button-secondary {
+  display: inline-block;
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  font-weight: 600;
+}
+a.text-button-secondary:hover {
+  background: var(--border);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.shell-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+.shell-table th,
+.shell-table td {
+  text-align: left;
+  padding: 0.45rem 0.4rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.shell-table th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-weight: 650;
+}
+.shell-mix {
+  min-width: 6.5rem;
+}
+.shell-range {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  max-height: 9rem;
+  overflow: auto;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.shell-range li {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.1rem 0.4rem;
+}
+
 .site-footer {
   margin-top: 3rem;
   padding-top: 1rem;

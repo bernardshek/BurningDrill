@@ -18,6 +18,7 @@ export function SiteNav() {
       </Link>
       <Link href="/">Home</Link>
       <Link href="/drill">Drill</Link>
+      <Link href="/solver">Solver shell</Link>
       {userId ? (
         <span className="user-chip" title="Local user_id stub (localStorage)">
           user:{userId.slice(0, 8)}…

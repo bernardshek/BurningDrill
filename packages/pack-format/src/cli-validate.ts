@@ -38,7 +38,13 @@ if (raw && typeof raw === "object" && raw.format === "drill_node_v1") {
     for (const e of result.errors) console.error(`  - ${e}`);
     process.exit(1);
   }
-  console.log(`OK (compact drill): ${result.pack.id}@${result.pack.version} — ${result.nodes.length} node(s)`);
+  if (result.pack.provenance?.ships_solver_code !== false) {
+    console.error("INVALID compact drill pack: ships_solver_code must be false");
+    process.exit(1);
+  }
+  console.log(
+    `OK (compact drill): ${result.pack.id}@${result.pack.version} ships_solver_code=false — ${result.nodes.length} node(s)`,
+  );
   process.exit(0);
 }
 
