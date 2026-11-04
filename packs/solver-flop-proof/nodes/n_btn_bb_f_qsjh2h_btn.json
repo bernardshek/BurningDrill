@@ -1,0 +1,69 @@
+{
+  "id": "n_btn_bb_f_qsjh2h_btn",
+  "st": "flop",
+  "hp": "BTN",
+  "vp": "BB",
+  "ip": true,
+  "tx": "twotone_broadway",
+  "bd": [
+    "Qs",
+    "Jh",
+    "2h"
+  ],
+  "pot": 6.5,
+  "eff": 100,
+  "nf": 0.8,
+  "wu": false,
+  "best": 1,
+  "dev": 0.1,
+  "actions": [
+    {
+      "a": "check",
+      "m": 0.1,
+      "ev": 0.2
+    },
+    {
+      "a": "bet_33",
+      "m": 0.75,
+      "ev": 0.8,
+      "sizeBb": 2.145
+    },
+    {
+      "a": "bet_75",
+      "m": 0.15,
+      "ev": 0.7,
+      "sizeBb": 4.875
+    }
+  ],
+  "kids": [
+    null,
+    null,
+    null
+  ],
+  "combos": [
+    {
+      "c": 206,
+      "w": 1
+    },
+    {
+      "c": 434,
+      "w": 1
+    },
+    {
+      "c": 1270,
+      "w": 1
+    },
+    {
+      "c": 1322,
+      "w": 1
+    }
+  ],
+  "drill_id": "btn_flop_cbet",
+  "line": "BTN open 2.5bb → BB call · Flop · Hero BTN to act",
+  "line_steps": [
+    "BTN open 2.5bb",
+    "BB call",
+    "Flop",
+    "Hero BTN to act"
+  ]
+}

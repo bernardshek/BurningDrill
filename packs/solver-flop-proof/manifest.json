@@ -1,0 +1,24 @@
+{
+  "id": "solver-flop-proof",
+  "name": "Solver flop proof · BTN vs BB SRP",
+  "version": "0.1.0",
+  "formatVersion": 1,
+  "format": "drill_node_v1",
+  "table_size": 6,
+  "game": "nlhe_cash",
+  "abstraction": "hu_after_folds",
+  "line": "BTN_vs_BB_SRP",
+  "game_lines": [
+    "flop"
+  ],
+  "provenance": {
+    "kind": "offline_solver_dump",
+    "practice": true,
+    "ships_solver_code": false,
+    "note": "Emitted by tools/pack-builder from a checked-in TexasSolver-style dump. Not a live solve and not solver source. provenance.solvers is on 0.1.0/manifest.json."
+  },
+  "nodes": [
+    "n_btn_bb_f_qsjh2h_bb_donk",
+    "n_btn_bb_f_qsjh2h_btn"
+  ]
+}

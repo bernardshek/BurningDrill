@@ -21,7 +21,20 @@ jobs:
       - run: pnpm i --frozen-lockfile
       - run: pnpm --filter @poker-trainer/pack-format build
       - run: pnpm test
+        # Includes tools/pack-builder tests against the checked-in dump.
       - run: pnpm typecheck
       - run: pnpm --filter @poker-trainer/web exec node scripts/sync-packs.mjs
       - run: pnpm --filter @poker-trainer/web build
-        # Intentionally NO solver install — web image stays solver-free
+        # Intentionally NO solver install — web image stays solver-free.
+
+  pack-builder-dump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: node tools/pack-builder/emit.mjs --check
+      - run: node --test tools/pack-builder/emit.test.mjs
+        # Dump JSON only. Does not install TexasSolver or build the web image.

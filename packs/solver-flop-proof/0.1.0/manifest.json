@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "pack_id": "solver-flop-proof",
+  "version": "0.1.0",
+  "format": "cash",
+  "table_size": 6,
+  "game_lines": [
+    "flop"
+  ],
+  "abstraction": "hu_after_folds",
+  "stack_depths_bb": [
+    100
+  ],
+  "bet_sizes": {
+    "labels": [
+      "33",
+      "75"
+    ]
+  },
+  "icm": null,
+  "blobs": {
+    "strategies": {
+      "sha256": "2172cef0e35b6f2c7c16278fa2f646e5b169ac90c2ebb929e56b470c0f93d5a9",
+      "bytes": 2283,
+      "content_type": "application/json"
+    },
+    "node_index": {
+      "sha256": "404c5191183c1dc0450840c11eaddd256baa7a666a39014f9f6ac27acbfd0d0a",
+      "bytes": 1117,
+      "content_type": "application/x-pack-node-index"
+    }
+  },
+  "node_index_format": "jsonl_v1",
+  "spot_key_schema": "street|board|pot_bb|ip_oop|facing",
+  "provenance": {
+    "built_at": "2026-11-04T06:45:00.000Z",
+    "builder": "pack-builder@0.1.0",
+    "solvers": [
+      {
+        "name": "TexasSolver",
+        "version": "0.2.0",
+        "license": "AGPL-3.0",
+        "role": "offline_solve"
+      }
+    ],
+    "ships_solver_code": false,
+    "source_note": "Emitted from a checked-in TexasSolver dump envelope (dumps() strategy + dump_evs-shaped evs). CI does not install or run a solver. This artifact is pack data only."
+  },
+  "license": {
+    "pack_data": "Proprietary",
+    "notice": "Strategy frequencies are trainer data. AGPL solvers were used offline only and are not included."
+  }
+}

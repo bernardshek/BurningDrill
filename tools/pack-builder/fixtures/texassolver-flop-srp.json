@@ -1,0 +1,80 @@
+{
+  "format": "texassolver_dump_v1",
+  "solver": {
+    "name": "TexasSolver",
+    "version": "0.2.0",
+    "license": "AGPL-3.0",
+    "role": "offline_solve"
+  },
+  "built_at": "2026-11-04T06:45:00.000Z",
+  "pack": {
+    "id": "solver-flop-proof",
+    "version": "0.1.0",
+    "name": "Solver flop proof · BTN vs BB SRP"
+  },
+  "spot": {
+    "street": "flop",
+    "board": ["Qs", "Jh", "2h"],
+    "pot": 6.5,
+    "effective_stack": 100,
+    "stack_bb": 100,
+    "table_size": 6,
+    "format": "cash",
+    "ip_position": "BTN",
+    "oop_position": "BB",
+    "abstraction": "hu_after_folds",
+    "preflop_line_steps": ["BTN open 2.5bb", "BB call"]
+  },
+  "source": {
+    "dump_rounds": 1,
+    "note": "Checked-in sample in PCfrSolver::dumps() shape plus dump_evs()-shaped evs. Frequencies are fixture data so CI can emit a pack without installing TexasSolver. Player 0 is IP, player 1 is OOP. Stock dump_result does not write evs."
+  },
+  "tree": {
+    "node_type": "action_node",
+    "player": 1,
+    "actions": ["CHECK", "BET 2.145000"],
+    "strategy": {
+      "actions": ["CHECK", "BET 2.145000"],
+      "strategy": {
+        "AhKd": [0.8, 0.2],
+        "AsKs": [0.8, 0.2],
+        "9c9d": [0.8, 0.2],
+        "7c6c": [0.8, 0.2]
+      }
+    },
+    "evs": {
+      "actions": ["CHECK", "BET 2.145000"],
+      "evs": {
+        "AhKd": [0.5, 0.3],
+        "AsKs": [0.5, 0.3],
+        "9c9d": [0.5, 0.3],
+        "7c6c": [0.5, 0.3]
+      }
+    },
+    "childrens": {
+      "CHECK": {
+        "node_type": "action_node",
+        "player": 0,
+        "actions": ["CHECK", "BET 2.145000", "BET 4.875000"],
+        "strategy": {
+          "actions": ["CHECK", "BET 2.145000", "BET 4.875000"],
+          "strategy": {
+            "AhKd": [0.4, 0.6, 0.0],
+            "AsKs": [0.0, 0.8, 0.2],
+            "9c9d": [0.0, 0.7, 0.3],
+            "7c6c": [0.0, 0.9, 0.1]
+          }
+        },
+        "evs": {
+          "actions": ["CHECK", "BET 2.145000", "BET 4.875000"],
+          "evs": {
+            "AhKd": [0.1, 0.9, 0.4],
+            "AsKs": [0.3, 0.7, 0.8],
+            "9c9d": [0.2, 0.8, 0.9],
+            "7c6c": [0.2, 0.8, 0.7]
+          }
+        }
+      }
+    }
+  }
+}
